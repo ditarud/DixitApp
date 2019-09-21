@@ -1,0 +1,7 @@
+{
+  "name": "Dixit",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
