@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { AuthenticateService } from '../services/authentication.service';
 import { NavController, ModalController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { stringify } from 'querystring';
 
 
 
@@ -18,6 +19,8 @@ export class HomePage implements OnInit {
   userEmail: string;
   users: UserI[];
   currentUserId: any;
+  user: UserI;
+  currentUser: UserI;
 
   public goalList: any[];
   public loadedGoalList: any[];
@@ -50,16 +53,15 @@ export class HomePage implements OnInit {
       this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
-      console.log(this.goalList);
+  
       
 
-      
+
   });
   }
 
   initializeItems(): void {
-    this.goalList = this.loadedGoalList;
-    
+    this.goalList = this.loadedGoalList;    
     this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
     
@@ -116,9 +118,34 @@ export class HomePage implements OnInit {
     });
   }
 
-  addFriend(){
+  addFriend(userId: string){
     this.currentUserId = this.authService.userDetails().uid;
+    var userToAdd = this.userService.getUser(userId).subscribe(res =>  this.user = res);
+    var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
+    console.log(this.user);
+    const name = this.user.name;
+    const email = this.user.email;
+    const friendsRequestReceived = this.user.friendsRequestReceived;
+    const friends = this.user.friends;
+    const friendsRequestSend = this.currentUser.friendsRequestSend;
+
     
+    friendsRequestReceived.push(this.currentUserId);
+    friendsRequestSend.push(userId);
+    
+    // Actualiza la lista de solicitud de amigos enviados del usuario logueado
+    this.userService.updateUser({
+    
+      friendsRequestSend: friendsRequestSend,
+      
+  
+  } , this.currentUserId);
+  
+    // Actualiza la lista de solicitud de amigos recibidos del usuario a agregar
+    this.userService.updateUser({
+      friendsRequestReceived: friendsRequestReceived,
+   
+  } , userId);
   }
   
 
