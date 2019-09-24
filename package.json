@@ -27,6 +27,7 @@
     "@ionic/angular": "^4.7.1",
     "angularfire2": "^5.2.1",
     "cordova-android": "8.1.0",
+    "cordova-browser": "6.0.0",
     "cordova-plugin-badge": "0.8.8",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
@@ -82,7 +83,8 @@
       "cordova-plugin-local-notification": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   }
 }
