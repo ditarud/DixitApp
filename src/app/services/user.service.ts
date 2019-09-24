@@ -11,8 +11,8 @@ export class UserService {
   private userCollection: AngularFirestoreCollection<UserI>;
   private users: Observable<UserI[]>;
 
-  constructor(db:AngularFirestore) {
-    this.userCollection = db.collection<UserI>('users');
+  constructor(db: AngularFirestore) {
+    this.userCollection = db.collection<UserI>('userProfile');
     this.users = this.userCollection.snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
@@ -30,15 +30,15 @@ export class UserService {
      return this.userCollection.doc<UserI>(id).valueChanges();
    }
 
-   updateUser(user:UserI, id:string){
+   updateUser(user: UserI, id: string){
      return this.userCollection.doc(id).update(user);
    }
 
-   addUser(user:UserI){
+   addUser(user: UserI){
      return this.userCollection.add(user);
    }
 
-   removeUser(id:string){
+   removeUser(id: string){
      return this.userCollection.doc(id).delete;
    }
 }

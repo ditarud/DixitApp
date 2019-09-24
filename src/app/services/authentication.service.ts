@@ -1,19 +1,36 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase/app';
- 
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { UserI } from '../models/user.interface';
+import { Observable } from 'rxjs';
+
+
+
 @Injectable()
 export class AuthenticateService {
- 
-  constructor(){}
- 
+  private users:UserI;
+
+  constructor(
+      private db: AngularFirestore
+    ) {
+      db.firestore.settings({ timestampsInSnapshots: true });
+    }
+
   registerUser(value){
    return new Promise<any>((resolve, reject) => {
      firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
-     .then(
-       res => resolve(res),
-       err => reject(err))
-   })
-  }
+     .then((newUserCredential: firebase.auth.UserCredential) => {
+      firebase
+        .firestore()
+        .doc(`/userProfile/${newUserCredential.user.uid}`)
+        .set({ email: value.email, friends: [] , name: '' });
+    }).then ( res => resolve(res), err => reject(err))
+    .catch(error => {
+      console.error(error);
+      throw new Error(error);
+    });
+  });
+} 
  
   loginUser(value){
    return new Promise<any>((resolve, reject) => {
