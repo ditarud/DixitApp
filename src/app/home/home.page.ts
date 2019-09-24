@@ -49,9 +49,8 @@ export class HomePage implements OnInit {
     .subscribe(goalList => {
       this.goalList = goalList;
       this.loadedGoalList = goalList;
-      console.log(goalList);
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
-      console.log(goalList);
+      
 
       
   });
