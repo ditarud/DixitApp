@@ -47,13 +47,22 @@ export class HomePage implements OnInit {
     
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
-      this.goalList = goalList;      this.loadedGoalList = goalList;
+      this.goalList = goalList;
+      this.loadedGoalList = goalList;
+      console.log(goalList);
+      this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
+      console.log(goalList);
+
       
   });
   }
 
   initializeItems(): void {
     this.goalList = this.loadedGoalList;
+    this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
+
+    
+
   }
 
   filterList(evt) {
@@ -65,8 +74,8 @@ export class HomePage implements OnInit {
       return;
     }
   
-    this.goalList = this.goalList.filter(currentGoal => {      
-      if (currentGoal.email && searchTerm) {
+    this.goalList = this.goalList.filter(currentGoal => {
+      if (currentGoal.email != this.authService.userDetails().email && searchTerm) {
         
         if (currentGoal.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
           return true;

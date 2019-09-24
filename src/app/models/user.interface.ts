@@ -3,6 +3,8 @@ export interface UserI {
     name: string;
     email: string;
     friends: Array<string>;
+    friendsRequestSend: Array<string>;
+    firnedsRequestReceived: Array<string>;
 
 
 }
