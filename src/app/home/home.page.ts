@@ -5,7 +5,7 @@ import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native
 import { Platform } from '@ionic/angular';
 import { AuthenticateService } from '../services/authentication.service';
 import { NavController, ModalController } from '@ionic/angular';
-
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 
@@ -17,8 +17,16 @@ import { NavController, ModalController } from '@ionic/angular';
 export class HomePage implements OnInit {
   userEmail: string;
   users: UserI[];
-  constructor(private plt: Platform, private userService:UserService,private localNotifications: LocalNotifications,
-    private navCtrl: NavController, private authService: AuthenticateService) {
+
+  public goalList: any[];
+  public loadedGoalList: any[];
+
+  constructor(private firestore: AngularFirestore, 
+              private plt: Platform, 
+              private userService: UserService,
+              private localNotifications: LocalNotifications,
+              private navCtrl: NavController, 
+              private authService: AuthenticateService) {
 
     this.plt.ready().then(() => {
       this.localNotifications.on('click').subscribe(res => {
@@ -37,7 +45,35 @@ export class HomePage implements OnInit {
   ngOnInit(){
     this.userService.getUsers().subscribe(res =>  this.users = res);
     
+    this.firestore.collection('userProfile').valueChanges()
+    .subscribe(goalList => {
+      this.goalList = goalList;      this.loadedGoalList = goalList;
+      
+  });
+  }
+
+  initializeItems(): void {
+    this.goalList = this.loadedGoalList;
+  }
+
+  filterList(evt) {
+    this.initializeItems();
   
+    const searchTerm = evt.srcElement.value;
+  
+    if (!searchTerm) {
+      return;
+    }
+  
+    this.goalList = this.goalList.filter(currentGoal => {      
+      if (currentGoal.email && searchTerm) {
+        
+        if (currentGoal.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+          return true;
+        }
+        return false;
+      }
+    });
   }
 
   
