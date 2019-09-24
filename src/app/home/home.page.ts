@@ -17,6 +17,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class HomePage implements OnInit {
   userEmail: string;
   users: UserI[];
+  currentUserId: any;
 
   public goalList: any[];
   public loadedGoalList: any[];
@@ -44,12 +45,12 @@ export class HomePage implements OnInit {
 
   ngOnInit(){
     this.userService.getUsers().subscribe(res =>  this.users = res);
-    
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
       this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
+      console.log(this.goalList);
       
 
       
@@ -58,6 +59,7 @@ export class HomePage implements OnInit {
 
   initializeItems(): void {
     this.goalList = this.loadedGoalList;
+    
     this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
     
@@ -112,6 +114,11 @@ export class HomePage implements OnInit {
       priority: 2,
 
     });
+  }
+
+  addFriend(){
+    this.currentUserId = this.authService.userDetails().uid;
+    
   }
   
 

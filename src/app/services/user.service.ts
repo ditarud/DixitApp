@@ -21,10 +21,12 @@ export class UserService {
       });
     }));
    }
+ ;
 
    getUsers(){
      return this.users;
    }
+
 
    getUser(id: string){
      return this.userCollection.doc<UserI>(id).valueChanges();
