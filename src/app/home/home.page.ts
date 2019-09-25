@@ -33,6 +33,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   public goalList: any[];
   public loadedGoalList: any[];
+  pendingRequests: Array<string>;
 
   constructor(private firestore: AngularFirestore, 
               private plt: Platform, 
@@ -63,19 +64,18 @@ export class HomePage implements OnInit, OnDestroy {
       this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
-  
-      
-
-
+    
   });
+    //this.getAllRequestReceived();
+  }
+
+  ionViewDidEnter() {
+    this.pendingRequests = this.currentUser.friendsRequestReceived;
+    console.log(this.pendingRequests);
   }
 
 
-  ionViewDidEnter() {
-    
 
-  
-}
 
   ngOnDestroy(){
     
@@ -170,7 +170,18 @@ export class HomePage implements OnInit, OnDestroy {
     console.log(result);
   }
 
-  async addFriend(userId: string, email: string){
+ 
+  getAllRequestReceived() {
+    //this.currentUserId = this.authService.userDetails().uid;
+    //var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
+    var pendingFriends = this.currentUser.friendsRequestReceived;
+    pendingFriends = pendingFriends.filter(obj => obj !== this.currentUser.id);
+    console.log(pendingFriends);
+
+
+  }
+
+  async addFriend(userId: string, email: string) {
 
     const alert = await this.alertController.create({
       header: 'Agregar amigo',
