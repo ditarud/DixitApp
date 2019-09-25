@@ -25,6 +25,7 @@ export class HomePage implements OnInit {
 
   public goalList: any[];
   public loadedGoalList: any[];
+  pendingRequests: Array<string>;
 
   constructor(private firestore: AngularFirestore, 
               private plt: Platform, 
@@ -50,16 +51,22 @@ export class HomePage implements OnInit {
 
   ngOnInit(){
     this.userService.getUsers().subscribe(res =>  this.users = res);
+    this.currentUserId = this.authService.userDetails().uid;
+    var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
+      this.currentUser = res} );
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
       this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
-  
-      
-
-
+    
   });
+    //this.getAllRequestReceived();
+  }
+
+  ionViewDidEnter() {
+    this.pendingRequests = this.currentUser.friendsRequestReceived;
+    console.log(this.pendingRequests);
   }
 
   initializeItems(): void {
@@ -151,7 +158,17 @@ export class HomePage implements OnInit {
     console.log(result);
   }
 
-  async addFriend(userId: string){
+  getAllRequestReceived() {
+    //this.currentUserId = this.authService.userDetails().uid;
+    //var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
+    var pendingFriends = this.currentUser.friendsRequestReceived;
+    pendingFriends = pendingFriends.filter(obj => obj !== this.currentUser.id);
+    console.log(pendingFriends);
+
+
+  }
+
+  async addFriend(userId: string) {
 
     const alert = await this.alertController.create({
       header: 'Agregar amigo',
@@ -203,9 +220,9 @@ export class HomePage implements OnInit {
     let result = await alert.onDidDismiss();
     console.log(result);
 
-
-    
   }
+
+  
   
 
 }

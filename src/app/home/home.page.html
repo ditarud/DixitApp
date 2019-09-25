@@ -7,6 +7,9 @@
   </ion-toolbar>
 </ion-header>
 
+  <div class="ion-text-start">Solicitudes Pendientes</div> 
+  <div class="ion-text-end" *ngIf="pendingRequests">{{ pendingRequests.length }}</div> 
+   
 <ion-content>
     <ion-searchbar
       showcancelbutton=""
