@@ -23,7 +23,8 @@ export class AuthenticateService {
       firebase
         .firestore()
         .doc(`/userProfile/${newUserCredential.user.uid}`)
-        .set({ email: value.email, friends: [] , name: '' , userId: newUserCredential.user.uid });
+        .set({ email: value.email, friends: [] , name: '' , userId: newUserCredential.user.uid , friendsRequestReceived: [], 
+        friendsRequestSend: [], });
     }).then ( res => resolve(res), err => reject(err))
     .catch(error => {
       console.error(error);
