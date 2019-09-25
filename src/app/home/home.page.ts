@@ -59,6 +59,15 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit(){
     //this.userService.getUsers().subscribe(res =>  this.users = res);
+    if(this.authService.userDetails()) {
+      this.currentUserId = this.authService.userDetails().uid;
+      var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
+         this.currentUser = res} );
+  
+      } else {
+          this.navCtrl.navigateBack('');
+        }
+      
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
       this.goalList = goalList;
