@@ -1,9 +1,54 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>friends</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Friends</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
+   
+        
+     
+        <ion-list>
+            <ion-list-header>
+              Solicitudes Pendientes
+            </ion-list-header>              
+           
+            <ion-item *ngFor="let requestId of pendingRequests">                          
+              <ion-label>
+                <h2 >{{ requestId }}</h2>
+                <h3>I'm a big deal</h3>
+                <p>Listen, I've had a pretty messed up day...</p>
+              </ion-label> <ion-button (click)="addFriend(requestId)" color="success">Aceptar</ion-button> <ion-button (click)="rejectFriend(requestId)" color="danger">Rechazar</ion-button>
+            </ion-item>
+        </ion-list>
+
+
+        <ion-list>
+            <ion-list-header>
+              Solicitudes Enviadas
+            </ion-list-header>    
+            <ion-item *ngFor="let requestId of sendingRequests">
+            
+              <ion-label>
+                <h2>{{requestId}}</h2>
+                <h3>I'm a big deal</h3>
+                <p>Listen, I've had a pretty messed up day...</p>
+              </ion-label> 
+            </ion-item>
+        </ion-list>
+
+        <ion-list>
+            <ion-list-header>
+              Mis Amigos
+            </ion-list-header>    
+            <ion-item *ngFor="let friend of friends">
+            
+              <ion-label>
+                <h2>{{ friend }}</h2>
+                <h3>I'm a big deal</h3>
+                <p>Listen, I've had a pretty messed up day...</p>
+              </ion-label>
+            </ion-item>
+        </ion-list>
 </ion-content>
