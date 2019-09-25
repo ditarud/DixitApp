@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserI } from '../models/user.interface';
 import { UserService } from '../services/user.service';
 import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
@@ -12,7 +12,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
   templateUrl: './friends.page.html',
   styleUrls: ['./friends.page.scss'],
 })
-export class FriendsPage implements OnInit {
+export class FriendsPage implements OnInit, OnDestroy {
   currentUser: any;
   currentUserId: string;
   friends: Array<string>;
@@ -27,10 +27,19 @@ export class FriendsPage implements OnInit {
     private authService: AuthenticateService) { }
 
   ngOnInit(){
+    if(this.authService.userDetails()) {
     this.currentUserId = this.authService.userDetails().uid;
     var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
        this.currentUser = res} );
+
+    } else {
+        this.navCtrl.navigateBack('');
+      }
     }
+
+  ngOnDestroy() { 
+
+  }
 
   ionViewDidEnter() {
     

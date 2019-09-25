@@ -14,7 +14,7 @@
     ></ion-searchbar>
     <ion-list>
       <ion-item *ngFor="let item of goalList">
-        <ion-label  >{{ item.email }}</ion-label><ion-button (click)="addFriend(item.userId)" color="success">Add</ion-button>
+        <ion-label  >{{ item.email }}</ion-label><ion-button (click)="addFriend(item.userId, item.email)" color="success">Add</ion-button>
       </ion-item>
     </ion-list>
   </ion-content>
@@ -22,7 +22,7 @@
 
 
 <ion-content padding>
-  <ion-button expand="block" (click)="scheduleNotification()">Schedule</ion-button>
+  <ion-button expand="block" (click)="scheduleNotification()">Notification Test</ion-button>
   <ion-button expand="block" (click)="goDashboard()">Dashboard</ion-button>
   <ion-button expand="block" (click)="goMyFriends()">My Friends</ion-button>
 </ion-content>

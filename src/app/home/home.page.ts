@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserI } from '../models/user.interface';
 import { UserService } from '../services/user.service';
 import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
@@ -8,6 +8,8 @@ import { NavController, ModalController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { stringify } from 'querystring';
 import { AlertController } from '@ionic/angular';
+import { first } from 'rxjs/operators';
+
 
 
 
@@ -16,12 +18,18 @@ import { AlertController } from '@ionic/angular';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
-  userEmail: string;
+export class HomePage implements OnInit, OnDestroy {
+  userEmailSend: string;
+  userEmailReceived: string;
   users: UserI[];
   currentUserId: any;
-  user: UserI;
+  user: any;
   currentUser: UserI;
+  friendsRequestReceived: any;
+  friendsRequestSend: any;
+  requestReceive: any;
+  resquestSend: any;
+
 
   public goalList: any[];
   public loadedGoalList: any[];
@@ -49,7 +57,7 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(){
-    this.userService.getUsers().subscribe(res =>  this.users = res);
+    //this.userService.getUsers().subscribe(res =>  this.users = res);
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
       this.goalList = goalList;
@@ -60,6 +68,17 @@ export class HomePage implements OnInit {
 
 
   });
+  }
+
+
+  ionViewDidEnter() {
+    
+
+  
+}
+
+  ngOnDestroy(){
+    
   }
 
   initializeItems(): void {
@@ -151,7 +170,7 @@ export class HomePage implements OnInit {
     console.log(result);
   }
 
-  async addFriend(userId: string){
+  async addFriend(userId: string, email: string){
 
     const alert = await this.alertController.create({
       header: 'Agregar amigo',
@@ -167,45 +186,44 @@ export class HomePage implements OnInit {
         }, {
           text: 'Agregar',
           handler: () => {
+            
+            
+            this.userEmailReceived = this.authService.userDetails().email;
             this.currentUserId = this.authService.userDetails().uid;
-            var userToAdd = this.userService.getUser(userId).subscribe(res =>  this.user = res);
-            var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
-            console.log(this.user);
-            const name = this.user.name;
-            const email = this.user.email;
-            const friendsRequestReceived = this.user.friendsRequestReceived;
-            const friends = this.user.friends;
-            const friendsRequestSend = this.currentUser.friendsRequestSend;
+            this.requestReceive = this.userService.getUser(userId).pipe(first()).subscribe(res => {  this.user = res , 
+              this.friendsRequestReceived = res.friendsRequestReceived,
+              this.friendsRequestReceived.push(this.userEmailReceived), 
+              this.userService.updateUser({
+                friendsRequestReceived: this.friendsRequestReceived,
+           
+          } , userId);} );
+         
 
+           this.resquestSend = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => { this.currentUser = res ,
+              this.friendsRequestSend = res.friendsRequestSend,
+              this.friendsRequestSend.push(email),
+              this.userService.updateUser({
     
-            friendsRequestReceived.push(this.currentUserId);
-            friendsRequestSend.push(userId);
-    
-            // Actualiza la lista de solicitud de amigos enviados del usuario logueado
-            this.userService.updateUser({
-    
-            friendsRequestSend: friendsRequestSend,
-      
-  
-        } , this.currentUserId);
-  
-          // Actualiza la lista de solicitud de amigos recibidos del usuario a agregar
-        this.userService.updateUser({
-        friendsRequestReceived: friendsRequestReceived,
-   
-  } , userId);
+                friendsRequestSend: this.friendsRequestSend,
+
+            } , this.currentUserId);
+          });
           }
+
         }
+
       ]
+
     });
-  
+
     await alert.present();
     let result = await alert.onDidDismiss();
     console.log(result);
+    this.requestReceive.unsubscribe();
+    this.resquestSend.unsubscribe();
 
 
-    
   }
-  
+
 
 }

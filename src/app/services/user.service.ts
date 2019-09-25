@@ -30,7 +30,7 @@ export class UserService {
 
    getUser(id: string){
      return this.userCollection.doc<UserI>(id).valueChanges();
-   }
+   }  
 
    updateUser(user: UserI, id: string){
      return this.userCollection.doc(id).update(user);
