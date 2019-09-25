@@ -104,6 +104,11 @@ export class HomePage implements OnInit {
     this.navCtrl.navigateForward('/dashboard');
 
   }
+
+  goMyFriends(){
+    this.navCtrl.navigateForward('/friends');
+
+  }
   scheduleNotification(){
     this.localNotifications.schedule({
       id: 1,
