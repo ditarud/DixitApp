@@ -7,6 +7,7 @@ import { AuthenticateService } from '../services/authentication.service';
 import { NavController, ModalController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { stringify } from 'querystring';
+import { AlertController } from '@ionic/angular';
 
 
 
@@ -30,7 +31,8 @@ export class HomePage implements OnInit {
               private userService: UserService,
               private localNotifications: LocalNotifications,
               private navCtrl: NavController, 
-              private authService: AuthenticateService) {
+              private authService: AuthenticateService,
+              public alertController: AlertController) {
 
     this.plt.ready().then(() => {
       this.localNotifications.on('click').subscribe(res => {
@@ -123,34 +125,86 @@ export class HomePage implements OnInit {
     });
   }
 
-  addFriend(userId: string){
-    this.currentUserId = this.authService.userDetails().uid;
-    var userToAdd = this.userService.getUser(userId).subscribe(res =>  this.user = res);
-    var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
-    console.log(this.user);
-    const name = this.user.name;
-    const email = this.user.email;
-    const friendsRequestReceived = this.user.friendsRequestReceived;
-    const friends = this.user.friends;
-    const friendsRequestSend = this.currentUser.friendsRequestSend;
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Confirm!',
+      message: 'Message <strong>text</strong>!!!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+  }
+
+  async addFriend(userId: string){
+
+    const alert = await this.alertController.create({
+      header: 'Agregar amigo',
+      message: '¿Quieres agregar a este usuario como amigo?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Agregar',
+          handler: () => {
+            this.currentUserId = this.authService.userDetails().uid;
+            var userToAdd = this.userService.getUser(userId).subscribe(res =>  this.user = res);
+            var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
+            console.log(this.user);
+            const name = this.user.name;
+            const email = this.user.email;
+            const friendsRequestReceived = this.user.friendsRequestReceived;
+            const friends = this.user.friends;
+            const friendsRequestSend = this.currentUser.friendsRequestSend;
 
     
-    friendsRequestReceived.push(this.currentUserId);
-    friendsRequestSend.push(userId);
+            friendsRequestReceived.push(this.currentUserId);
+            friendsRequestSend.push(userId);
     
-    // Actualiza la lista de solicitud de amigos enviados del usuario logueado
-    this.userService.updateUser({
+            // Actualiza la lista de solicitud de amigos enviados del usuario logueado
+            this.userService.updateUser({
     
-      friendsRequestSend: friendsRequestSend,
+            friendsRequestSend: friendsRequestSend,
       
   
-  } , this.currentUserId);
+        } , this.currentUserId);
   
-    // Actualiza la lista de solicitud de amigos recibidos del usuario a agregar
-    this.userService.updateUser({
-      friendsRequestReceived: friendsRequestReceived,
+          // Actualiza la lista de solicitud de amigos recibidos del usuario a agregar
+        this.userService.updateUser({
+        friendsRequestReceived: friendsRequestReceived,
    
   } , userId);
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+    let result = await alert.onDidDismiss();
+    console.log(result);
+
+
+    
   }
   
 
