@@ -7,8 +7,8 @@
   </ion-toolbar>
 </ion-header>
 
-  <ion-label>Solicitudes Pendientes</ion-label> 
-  <div class="ion-text-end" *ngIf="pendingRequests">{{ pendingRequests.length }}</div> 
+  <ion-label style="font-weight: bold" *ngIf="pendingRequests"> Solicitudes Pendientes: {{ pendingRequests.length }}</ion-label> 
+ 
    
 <ion-content>
     <ion-searchbar

@@ -59,10 +59,11 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit(){
     //this.userService.getUsers().subscribe(res =>  this.users = res);
+    
     if(this.authService.userDetails()) {
       this.currentUserId = this.authService.userDetails().uid;
       var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
-         this.currentUser = res} );
+          this.currentUser = res , this.pendingRequests = this.currentUser.friendsRequestReceived} );
   
       } else {
           this.navCtrl.navigateBack('');
@@ -75,11 +76,12 @@ export class HomePage implements OnInit, OnDestroy {
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
     
   });
+
     //this.getAllRequestReceived();
   }
 
   ionViewDidEnter() {
-    this.pendingRequests = this.currentUser.friendsRequestReceived;
+    this.pendingRequests = this.currentUser.friendsRequestReceived
     console.log(this.pendingRequests);
   }
 
@@ -143,7 +145,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.localNotifications.schedule({
       id: 1,
       title: 'Attention',
-      text: 'Tal Señor te quiere agregar como amigo',
+      text: 'X te quiere agregar como amigo',
       data: {mydata: 'My hidden messa this is'},
       trigger: {in: 5, unit: ELocalNotificationTriggerUnit.SECOND},
       foreground: true,
