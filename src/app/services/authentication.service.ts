@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthenticateService {
-  private users:UserI;
+  private users: UserI;
 
   constructor(
       private db: AngularFirestore
@@ -31,7 +31,7 @@ export class AuthenticateService {
       throw new Error(error);
     });
   });
-} 
+}
  
   loginUser(value){
    return new Promise<any>((resolve, reject) => {
@@ -39,7 +39,7 @@ export class AuthenticateService {
      .then(
        res => resolve(res),
        err => reject(err))
-   })
+   });
   }
  
   logoutUser(){
@@ -53,7 +53,7 @@ export class AuthenticateService {
           reject();
         });
       }
-    })
+    });
   }
  
   userDetails(){

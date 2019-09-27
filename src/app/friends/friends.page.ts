@@ -37,57 +37,45 @@ export class FriendsPage implements OnInit, OnDestroy {
       }
     }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
 
   }
 
   ionViewDidEnter() {
-    
 
-      this.pendingRequests = this.currentUser.friendsRequestReceived;
-      this.sendingRequests = this.currentUser.friendsRequestSend;
-      this.friends = this.currentUser.friends;
-      console.log(this.friends);
+    this.pendingRequests = this.currentUser.friendsRequestReceived;
+    this.sendingRequests = this.currentUser.friendsRequestSend;
+    this.friends = this.currentUser.friends;
+
   }
 
-  addFriend(requestId: string){
-    
-  
-   
-    const friends = this.currentUser.friends
+  addFriend(requestId: string) {
+
+    const friends = this.currentUser.friends;
     var pendingFriends = this.currentUser.friendsRequestReceived;
     friends.push(requestId);
     pendingFriends = pendingFriends.filter(obj => obj !== requestId);
-    
+
     this.userService.updateUser({
-    
       friends: friends,
       friendsRequestReceived: pendingFriends,
-      
-  
-  } , this.currentUserId);
+  }, this.currentUserId);
+
     this.pendingRequests = this.pendingRequests.filter(obj => obj !== requestId);
   }
 
-  rejectFriend(requestId: string){
-    
+  rejectFriend(requestId: string) {
+
     var pendingFriends = this.currentUser.friendsRequestReceived;
-   
     pendingFriends = pendingFriends.filter(obj => obj !== requestId);
-    
+
     this.userService.updateUser({
-    
-     
       friendsRequestReceived: pendingFriends,
-      
-  
-  } , this.currentUserId);
+    } , this.currentUserId);
+
     this.pendingRequests = this.pendingRequests.filter(obj => obj !== requestId);
 
   }
 
-  setCurrentUser(){
-
-  }
 
 }

@@ -6,11 +6,8 @@ import { Platform } from '@ionic/angular';
 import { AuthenticateService } from '../services/authentication.service';
 import { NavController, ModalController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { stringify } from 'querystring';
 import { AlertController } from '@ionic/angular';
 import { first } from 'rxjs/operators';
-
-
 
 
 @Component({
@@ -21,25 +18,25 @@ import { first } from 'rxjs/operators';
 export class HomePage implements OnInit, OnDestroy {
   userEmailSend: string;
   userEmailReceived: string;
-  users: UserI[];
+  // users: UserI[];
   currentUserId: any;
   user: any;
   currentUser: UserI;
   friendsRequestReceived: any;
   friendsRequestSend: any;
   requestReceive: any;
-  resquestSend: any;
+  requestSend: any;
 
 
   public goalList: any[];
   public loadedGoalList: any[];
   pendingRequests: Array<string>;
 
-  constructor(private firestore: AngularFirestore, 
-              private plt: Platform, 
+  constructor(private firestore: AngularFirestore,
+              private plt: Platform,
               private userService: UserService,
               private localNotifications: LocalNotifications,
-              private navCtrl: NavController, 
+              private navCtrl: NavController,
               private authService: AuthenticateService,
               public alertController: AlertController) {
 
@@ -59,59 +56,56 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit(){
     //this.userService.getUsers().subscribe(res =>  this.users = res);
-    
+
     if(this.authService.userDetails()) {
       this.currentUserId = this.authService.userDetails().uid;
       var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
-          this.currentUser = res , this.pendingRequests = this.currentUser.friendsRequestReceived} );
-  
+          this.currentUser = res , this.pendingRequests = this.currentUser.friendsRequestReceived; });
+
       } else {
           this.navCtrl.navigateBack('');
         }
-      
+
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
       this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
-    
+
   });
 
-    //this.getAllRequestReceived();
+
+  }
+
+  ngOnDestroy() {
+
   }
 
   ionViewDidEnter() {
-    this.pendingRequests = this.currentUser.friendsRequestReceived
-    console.log(this.pendingRequests);
+    this.pendingRequests = this.currentUser.friendsRequestReceived;
+
   }
 
-
-
-
-  ngOnDestroy(){
-    
-  }
 
   initializeItems(): void {
-    this.goalList = this.loadedGoalList;    
+    this.goalList = this.loadedGoalList; 
     this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
-    
 
   }
 
   filterList(evt) {
     this.initializeItems();
-  
+
     const searchTerm = evt.srcElement.value;
-  
+
     if (!searchTerm) {
       return;
     }
-  
+
     this.goalList = this.goalList.filter(currentGoal => {
-      if (currentGoal.email != this.authService.userDetails().email && searchTerm) {
-        
+      if (currentGoal.email !== this.authService.userDetails().email && searchTerm) {
+
         if (currentGoal.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
           return true;
         }
@@ -120,8 +114,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  
-  logout(){
+  logout() {
     this.authService.logoutUser()
     .then(res => {
       console.log(res);
@@ -129,15 +122,15 @@ export class HomePage implements OnInit, OnDestroy {
     })
     .catch(error => {
       console.log(error);
-    })
+    });
   }
-  
-  goDashboard(){
+
+  goDashboard() {
     this.navCtrl.navigateForward('/dashboard');
 
   }
 
-  goMyFriends(){
+  goMyFriends() {
     this.navCtrl.navigateForward('/friends');
 
   }
@@ -181,16 +174,6 @@ export class HomePage implements OnInit, OnDestroy {
     console.log(result);
   }
 
- 
-  getAllRequestReceived() {
-    //this.currentUserId = this.authService.userDetails().uid;
-    //var currentUser = this.userService.getUser(this.currentUserId).subscribe(res => this.currentUser = res);
-    var pendingFriends = this.currentUser.friendsRequestReceived;
-    pendingFriends = pendingFriends.filter(obj => obj !== this.currentUser.id);
-    console.log(pendingFriends);
-
-
-  }
 
   async addFriend(userId: string, email: string) {
 
@@ -208,42 +191,35 @@ export class HomePage implements OnInit, OnDestroy {
         }, {
           text: 'Agregar',
           handler: () => {
-            
-            
+
             this.userEmailReceived = this.authService.userDetails().email;
             this.currentUserId = this.authService.userDetails().uid;
+
             this.requestReceive = this.userService.getUser(userId).pipe(first()).subscribe(res => {  this.user = res , 
               this.friendsRequestReceived = res.friendsRequestReceived,
-              this.friendsRequestReceived.push(this.userEmailReceived), 
+              this.friendsRequestReceived.push(this.userEmailReceived),
               this.userService.updateUser({
                 friendsRequestReceived: this.friendsRequestReceived,
-           
-          } , userId);} );
-         
+              } , userId); });
 
-           this.resquestSend = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => { this.currentUser = res ,
+
+            this.requestSend = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => { this.currentUser = res ,
               this.friendsRequestSend = res.friendsRequestSend,
               this.friendsRequestSend.push(email),
               this.userService.updateUser({
-    
                 friendsRequestSend: this.friendsRequestSend,
-
-            } , this.currentUserId);
-          });
+              } , this.currentUserId);
+            });
           }
-
         }
-
       ]
-
     });
 
     await alert.present();
     let result = await alert.onDidDismiss();
     console.log(result);
     this.requestReceive.unsubscribe();
-    this.resquestSend.unsubscribe();
-
+    this.requestSend.unsubscribe();
 
   }
 

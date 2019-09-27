@@ -14,7 +14,7 @@ import { AuthenticateService } from '../services/authentication.service';
 export class LoginPage implements OnInit {
   validations_form: FormGroup;
   errorMessage: string = '';
-  
+
   constructor(
     private navCtrl: NavController,
     private authService: AuthenticateService,
