@@ -7,9 +7,8 @@ import { AuthenticateService } from '../services/authentication.service';
 import { NavController, ModalController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
-import { first, map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { CardsService } from '../services/cards.service';
-import * as firebase from 'firebase';
 
 
 @Component({
@@ -32,6 +31,7 @@ export class HomePage implements OnInit, OnDestroy {
   statusUpdated: any;
   currentUserEmail: string;
   public unsubscribeBackEvent: any;
+  updateStatus: any;
 
 
   public goalList: any[];
@@ -63,10 +63,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit(){
-    //console.log(this.cardService.getAllIomage());    
+  ngOnInit() {
 
-    //this.userService.getUsers().subscribe(res =>  this.users = res);
     this.currentUserEmail = this.authService.userDetails().email;
     this.initializeBackButtonCustomHandler();
     if(this.authService.userDetails()) {
@@ -81,9 +79,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.updateDoc('Online');
 
     this.firestore.collection('userProfile').valueChanges()
-    
     .subscribe(goalList => {
-      //this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
@@ -155,7 +151,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  logout() {
+  logout() {    
     this.updateDoc('Offline');
     this.authService.logoutUser()
     .then(res => {
@@ -272,14 +268,14 @@ export class HomePage implements OnInit, OnDestroy {
   updateDoc(value: string) {
     
     this.currentUserId = this.authService.userDetails().uid;
-    this.requestReceive = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => {this.user = res,
+    this.updateStatus = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => {this.user = res,
       this.currentUserStatus = res.status,
       this.currentUserStatus = value,
       this.userService.updateUser({
         status: this.currentUserStatus,
       } , this.currentUserId); });
     
-    //this.requestReceive.unsubscribe();
+    
 }
 
 }
