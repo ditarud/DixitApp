@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'match-list', loadChildren: './match-list/match-list.module#MatchListPageModule' },
   { path: 'game-creation', loadChildren: './game-creation/game-creation.module#GameCreationPageModule' },
   { path: 'game', loadChildren: './game/game.module#GamePageModule' },
+  { path: 'board', loadChildren: './board/board.module#BoardPageModule' },
 ];
 
 @NgModule({
