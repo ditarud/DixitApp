@@ -8,6 +8,9 @@ const routes: Routes = [
   { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
   { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardPageModule' },
   { path: 'friends', loadChildren: './friends/friends.module#FriendsPageModule' },
+  { path: 'match-list', loadChildren: './match-list/match-list.module#MatchListPageModule' },
+  { path: 'game-creation', loadChildren: './game-creation/game-creation.module#GameCreationPageModule' },
+  { path: 'game', loadChildren: './game/game.module#GamePageModule' },
 ];
 
 @NgModule({

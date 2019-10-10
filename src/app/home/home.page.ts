@@ -26,6 +26,8 @@ export class HomePage implements OnInit, OnDestroy {
   friendsRequestSend: any;
   requestReceive: any;
   requestSend: any;
+  currentUserEmail: string;
+  public unsubscribeBackEvent: any;
 
 
   public goalList: any[];
@@ -38,7 +40,12 @@ export class HomePage implements OnInit, OnDestroy {
               private localNotifications: LocalNotifications,
               private navCtrl: NavController,
               private authService: AuthenticateService,
-              public alertController: AlertController) {
+              public alertController: AlertController, 
+              ) {
+
+             
+              
+                
 
     this.plt.ready().then(() => {
       this.localNotifications.on('click').subscribe(res => {
@@ -56,7 +63,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit(){
     //this.userService.getUsers().subscribe(res =>  this.users = res);
-
+    this.currentUserEmail = this.authService.userDetails().email;
+    this.initializeBackButtonCustomHandler();
     if(this.authService.userDetails()) {
       this.currentUserId = this.authService.userDetails().uid;
       var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
@@ -77,8 +85,25 @@ export class HomePage implements OnInit, OnDestroy {
 
   }
 
-  ngOnDestroy() {
+  initializeBackButtonCustomHandler(): void {
+    this.unsubscribeBackEvent = this.plt.backButton.subscribeWithPriority(999999,  () => {
+       
+    });
+    /* here priority 101 will be greater then 100 
+    if we have registerBackButtonAction in app.component.ts */
+  }
 
+  ngOnDestroy() {
+    
+  }
+
+  ionvViewWillEnter() {
+    this.initializeBackButtonCustomHandler();
+    
+  }
+
+  ionViewWillLeave(){    
+    this.unsubscribeBackEvent.unsubscribe();
   }
 
   ionViewDidEnter() {
@@ -132,7 +157,10 @@ export class HomePage implements OnInit, OnDestroy {
 
   goMyFriends() {
     this.navCtrl.navigateForward('/friends');
+  }
 
+  goMatchList() {
+    this.navCtrl.navigateForward('/match-list');
   }
   scheduleNotification(){
     this.localNotifications.schedule({

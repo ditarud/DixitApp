@@ -1,11 +1,11 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>
-      Home 
-     
-    </ion-title>
+    <ion-title slot="start">  Home   </ion-title> 
+    <ion-title slot="end" style="font-size: 12px" > Hola: {{ currentUserEmail }}</ion-title>
   </ion-toolbar>
+  
 </ion-header>
+
 
   <ion-label style="font-weight: bold" *ngIf="pendingRequests"> Solicitudes Pendientes: {{ pendingRequests.length }}</ion-label> 
  
@@ -20,13 +20,14 @@
         <ion-label  >{{ item.email }}</ion-label><ion-button (click)="addFriend(item.userId, item.email)" color="success">Add</ion-button>
       </ion-item>
     </ion-list>
-  </ion-content>
+</ion-content>
 
 
 <ion-content padding>
   <ion-button expand="block" (click)="scheduleNotification()">Notification Test</ion-button>
   <ion-button expand="block" (click)="goDashboard()">Dashboard</ion-button>
   <ion-button expand="block" (click)="goMyFriends()">My Friends</ion-button>
+  <ion-button expand="block" (click)="goMatchList()">Jugar</ion-button>
 </ion-content>
 
 
