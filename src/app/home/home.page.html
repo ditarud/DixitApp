@@ -9,7 +9,7 @@
 
   <ion-label style="font-weight: bold" *ngIf="pendingRequests"> Solicitudes Pendientes: {{ pendingRequests.length }}</ion-label> 
  
-   
+
 <ion-content>
     <ion-searchbar
       showcancelbutton=""
@@ -17,7 +17,7 @@
     ></ion-searchbar>
     <ion-list>
       <ion-item *ngFor="let item of goalList">
-        <ion-label  >{{ item.email }}</ion-label><ion-button (click)="addFriend(item.userId, item.email)" color="success">Add</ion-button>
+        <ion-label>{{ item.email }}</ion-label><ion-button (click)="addFriend(item.userId, item.email)" color="success">Add</ion-button>
       </ion-item>
     </ion-list>
   </ion-content>

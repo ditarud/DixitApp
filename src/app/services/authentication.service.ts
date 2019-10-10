@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { UserI } from '../models/user.interface';
 import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 
 
@@ -11,9 +12,11 @@ export class AuthenticateService {
   private users: UserI;
 
   constructor(
-      private db: AngularFirestore
+      private db: AngularFirestore,
+      private afAuth: AngularFireAuth
     ) {
-      db.firestore.settings({ timestampsInSnapshots: true });
+      db.firestore.settings({ timestampsInSnapshots: true });      
+      
     }
 
   registerUser(value){
@@ -23,7 +26,7 @@ export class AuthenticateService {
       firebase
         .firestore()
         .doc(`/userProfile/${newUserCredential.user.uid}`)
-        .set({ email: value.email, friends: [] , name: '' , userId: newUserCredential.user.uid , friendsRequestReceived: [], 
+        .set({ email: value.email, status: '', friends: [] , name: '' , userId: newUserCredential.user.uid , friendsRequestReceived: [], 
         friendsRequestSend: [], });
     }).then ( res => resolve(res), err => reject(err))
     .catch(error => {
@@ -38,7 +41,7 @@ export class AuthenticateService {
      firebase.auth().signInWithEmailAndPassword(value.email, value.password)
      .then(
        res => resolve(res),
-       err => reject(err))
+       err => reject(err));
    });
   }
  
@@ -47,6 +50,7 @@ export class AuthenticateService {
       if(firebase.auth().currentUser){
         firebase.auth().signOut()
         .then(() => {
+          
           console.log("LOG Out");
           resolve();
         }).catch((error) => {
