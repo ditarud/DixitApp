@@ -7,7 +7,9 @@ import { AuthenticateService } from '../services/authentication.service';
 import { NavController, ModalController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
+import { CardsService } from '../services/cards.service';
+import * as firebase from 'firebase';
 
 
 @Component({
@@ -26,6 +28,8 @@ export class HomePage implements OnInit, OnDestroy {
   friendsRequestSend: any;
   requestReceive: any;
   requestSend: any;
+  currentUserStatus: any;
+  statusUpdated: any;
   currentUserEmail: string;
   public unsubscribeBackEvent: any;
 
@@ -41,11 +45,9 @@ export class HomePage implements OnInit, OnDestroy {
               private navCtrl: NavController,
               private authService: AuthenticateService,
               public alertController: AlertController, 
+              private cardService: CardsService
               ) {
 
-             
-              
-                
 
     this.plt.ready().then(() => {
       this.localNotifications.on('click').subscribe(res => {
@@ -62,6 +64,8 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ngOnInit(){
+    //console.log(this.cardService.getAllIomage());    
+
     //this.userService.getUsers().subscribe(res =>  this.users = res);
     this.currentUserEmail = this.authService.userDetails().email;
     this.initializeBackButtonCustomHandler();
@@ -73,10 +77,13 @@ export class HomePage implements OnInit, OnDestroy {
       } else {
           this.navCtrl.navigateBack('');
         }
+    
+    this.updateDoc('Online');
 
     this.firestore.collection('userProfile').valueChanges()
+    
     .subscribe(goalList => {
-      this.goalList = goalList;
+      //this.goalList = goalList;
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
@@ -114,6 +121,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
+    
     this.pendingRequests = this.currentUser.friendsRequestReceived;
    
 
@@ -121,9 +129,9 @@ export class HomePage implements OnInit, OnDestroy {
 
 
   initializeItems(): void {
-    this.goalList = this.loadedGoalList; 
+    this.goalList = this.loadedGoalList;
     this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
-
+    
 
   }
 
@@ -139,7 +147,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.goalList = this.goalList.filter(currentGoal => {
       if (currentGoal.email !== this.authService.userDetails().email && searchTerm) {
 
-        if (currentGoal.email.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+        if (currentGoal.email === searchTerm) {
           return true;
         }
         return false;
@@ -148,6 +156,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   logout() {
+    this.updateDoc('Offline');
     this.authService.logoutUser()
     .then(res => {
       console.log(res);
@@ -157,6 +166,8 @@ export class HomePage implements OnInit, OnDestroy {
       console.log(error);
     });
   }
+
+  
 
   goDashboard() {
     this.navCtrl.navigateForward('/dashboard');
@@ -250,7 +261,6 @@ export class HomePage implements OnInit, OnDestroy {
         }
       ]
     });
-
     await alert.present();
     let result = await alert.onDidDismiss();
     console.log(result);
@@ -258,6 +268,18 @@ export class HomePage implements OnInit, OnDestroy {
     this.requestSend.unsubscribe();
 
   }
-
+  
+  updateDoc(value: string) {
+    
+    this.currentUserId = this.authService.userDetails().uid;
+    this.requestReceive = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => {this.user = res,
+      this.currentUserStatus = res.status,
+      this.currentUserStatus = value,
+      this.userService.updateUser({
+        status: this.currentUserStatus,
+      } , this.currentUserId); });
+    
+    //this.requestReceive.unsubscribe();
+}
 
 }
