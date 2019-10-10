@@ -148,6 +148,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   logout() {
+    this.updateDoc('Offline');
     this.authService.logoutUser()
     .then(res => {
       console.log(res);
@@ -259,18 +260,9 @@ export class HomePage implements OnInit, OnDestroy {
     this.requestSend.unsubscribe();
 
   }
-
-  setStatusOnLine(status: string) {
-        this.currentUserId = this.authService.userDetails().uid;
-        this.statusUpdated = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => { this.currentUser = res ,
-          this.currentUserStatus = res.status,
-          this.userService.updateUser(this.currentUserId , this.currentUserId.status);
-        });
-        this.currentUserStatus.unsubscribe();
-        }
   
   updateDoc(value: string) {
-    console.log(value);
+    
     this.currentUserId = this.authService.userDetails().uid;
     this.requestReceive = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => {this.user = res,
       this.currentUserStatus = res.status,
@@ -279,7 +271,7 @@ export class HomePage implements OnInit, OnDestroy {
         status: this.currentUserStatus,
       } , this.currentUserId); });
     
-    this.requestReceive.unsubscribe();
+    //this.requestReceive.unsubscribe();
 }
 
 }
