@@ -80,6 +80,10 @@ export class HomePage implements OnInit, OnDestroy {
       this.loadedGoalList = goalList;
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
+      if ( this.pendingRequests.length > 0) {
+        this.scheduleNotification(this.pendingRequests.length);
+     }
+
   });
 
 
@@ -99,6 +103,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   ionvViewWillEnter() {
     this.initializeBackButtonCustomHandler();
+    if ( this.pendingRequests.length > 0) {
+      this.scheduleNotification(this.pendingRequests.length);
+   }
     
   }
 
@@ -108,6 +115,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     this.pendingRequests = this.currentUser.friendsRequestReceived;
+   
 
   }
 
@@ -162,13 +170,13 @@ export class HomePage implements OnInit, OnDestroy {
   goMatchList() {
     this.navCtrl.navigateForward('/match-list');
   }
-  scheduleNotification(){
+  scheduleNotification(notificationsNumber: number) {
     this.localNotifications.schedule({
       id: 1,
-      title: 'Attention',
-      text: 'X te quiere agregar como amigo',
+      title: 'Solicitud de Amistad',
+      text: 'Tienes ' + notificationsNumber + ' solicitudes pendientes',
       data: {mydata: 'My hidden messa this is'},
-      trigger: {in: 5, unit: ELocalNotificationTriggerUnit.SECOND},
+      trigger: {in: 1, unit: ELocalNotificationTriggerUnit.SECOND},
       foreground: true,
       lockscreen: true,
       priority: 2,
