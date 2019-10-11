@@ -32,7 +32,7 @@ export class HomePage implements OnInit, OnDestroy {
   currentUserEmail: string;
   public unsubscribeBackEvent: any;
   updateStatus: any;
-
+  goalList2: any;
 
   public goalList: any[];
   public loadedGoalList: any[];
@@ -69,6 +69,9 @@ export class HomePage implements OnInit, OnDestroy {
     this.initializeBackButtonCustomHandler();
     if(this.authService.userDetails()) {
       this.currentUserId = this.authService.userDetails().uid;
+       
+      this.updateDoc('Online');
+      
       var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
           this.currentUser = res , this.pendingRequests = this.currentUser.friendsRequestReceived; });
 
@@ -76,7 +79,7 @@ export class HomePage implements OnInit, OnDestroy {
           this.navCtrl.navigateBack('');
         }
     
-    this.updateDoc('Online');
+   
 
     this.firestore.collection('userProfile').valueChanges()
     .subscribe(goalList => {
@@ -86,6 +89,7 @@ export class HomePage implements OnInit, OnDestroy {
       if ( this.pendingRequests.length > 0) {
         this.scheduleNotification(this.pendingRequests.length);
      }
+    
 
   });
 
@@ -140,7 +144,7 @@ export class HomePage implements OnInit, OnDestroy {
       return;
     }
 
-    this.goalList = this.goalList.filter(currentGoal => {
+    this.goalList2 = this.goalList.filter(currentGoal => {
       if (currentGoal.email !== this.authService.userDetails().email && searchTerm) {
 
         if (currentGoal.email === searchTerm) {
@@ -151,8 +155,9 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  logout() {    
+  logout() {
     this.updateDoc('Offline');
+    
     this.authService.logoutUser()
     .then(res => {
       console.log(res);

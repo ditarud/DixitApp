@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
     ],
     'password': [
       { type: 'required', message: 'Password is required.' },
-      { type: 'minlength', message: 'Password must be at least 5 characters long.' }
+      { type: 'minlength', message: 'Password must be at least 1 characters long.' }
     ]
   };
 
@@ -39,7 +39,7 @@ export class LoginPage implements OnInit {
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
       password: new FormControl('', Validators.compose([
-        Validators.minLength(5),
+        Validators.minLength(1),
         Validators.required
       ])),
     });
