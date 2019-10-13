@@ -29,8 +29,8 @@ export class CardsService {
       return this.images_from_firebase;
     } 
   
-  createDeckForGame(deck){
+  createDeckForGame(deck) {
     return this.fs.collection('deck').add(deck);
-  }  
+  }
 }
 
