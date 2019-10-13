@@ -1,6 +1,13 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Juego</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Dixit Pixit</ion-title>
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="match-list"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+        <ion-button style="background-color: royalblue" (click)="openMyModal()"> Ver Tablero </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

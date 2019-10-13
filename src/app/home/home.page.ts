@@ -182,6 +182,7 @@ export class HomePage implements OnInit, OnDestroy {
   goMatchList() {
     this.navCtrl.navigateForward('/match-list');
   }
+  
   scheduleNotification(notificationsNumber: number) {
     this.localNotifications.schedule({
       id: 1,

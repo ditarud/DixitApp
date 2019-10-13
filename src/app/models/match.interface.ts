@@ -1,11 +1,13 @@
 export interface MatchI {
     id?: string;
     status?: string;
-    players?: string;
+    players?: Array<string>;
     maxScore?: number;
-    boardId?: Array<string>;
+    boardId?: string;
     duration?: number;
     playerMaster?: string;
+    deckId?: string;
+    date?: string;
 
 
 }
