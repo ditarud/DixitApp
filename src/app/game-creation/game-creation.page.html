@@ -7,6 +7,20 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-list>
+  <ion-list-header>
+    Mis Amigos
+  </ion-list-header>    
+  <ion-item *ngFor="let friend of friends">
+  
+    <ion-label>
+      <h2>{{ friend }}</h2>
+      <h3>I'm a big deal</h3>
+      <p>Listen, I've had a pretty messed up day...</p>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
 <ion-content>
 
 </ion-content>

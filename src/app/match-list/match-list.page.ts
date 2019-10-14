@@ -58,7 +58,7 @@ export class MatchListPage implements OnInit {
     let record = {};
     record['cards_on_deck'] = this.imagesFromDb;
     record['discarded_cards'] = [];
-    record['match_id'] = 'esta si que si';
+    record['match_id'] = 'aer';
     record['playing_cards'] = [];
 
     this.cardService.createDeckForGame(record).then(resp => {
