@@ -13,11 +13,13 @@
     <ion-list class="ion-padding">
         <ion-item-sliding *ngFor="let match of activeMatches">
         
-            <ion-card>                
-                  Partida ID : {{match}}
-                  Bla asdf asf asdfadsfsadfsadfdaffadfsadfass
+            <ion-card>             
+                <button ion-item (click)="loadRunningGame()">
+                  
+                   ID Partida: {{match}} 
+                   Estado: {{matchStatus}}
                
-    
+                </button>  
             </ion-card>
          
         </ion-item-sliding>
