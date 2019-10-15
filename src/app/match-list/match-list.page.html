@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar  color="primary">
+  <ion-toolbar>
     <ion-title>Partidas Activas</ion-title>
     <ion-buttons slot="start">
         <ion-back-button defaultHref="home"></ion-back-button>
@@ -12,14 +12,11 @@
 
     <ion-list class="ion-padding">
         <ion-item-sliding *ngFor="let match of activeMatches">
-        
-            <ion-card>             
-                <button ion-item (click)="loadRunningGame(match)">
-                  
-                   ID Partida: {{match}} 
-                   Estado: {{matchStatus}}
+          
+            <ion-card class="card" (click)="loadRunningGame(match)">       
+                   <b>ID Partida:</b> {{match}} <br/>
+                   <b>Estado:</b> {{matchStatus}}
                
-                </button>  
             </ion-card>
          
         </ion-item-sliding>
@@ -31,7 +28,7 @@
 
 
 <ion-footer (click)="createNewGame()" >
-    <ion-toolbar color="secondary">
+    <ion-toolbar color="tertiary">
       <ion-title style="text-align: center">Nueva Partida</ion-title>
     </ion-toolbar>
 </ion-footer>
