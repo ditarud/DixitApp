@@ -6,6 +6,7 @@ export interface UserI {
     friends?: Array<string>;
     friendsRequestSend?: Array<string>;
     friendsRequestReceived?: Array<string>;
+    pendingPlayInvitations?: Array<string>;
 
 
 }

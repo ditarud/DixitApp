@@ -34,10 +34,10 @@ export class GameCreationPage implements OnInit {
   userEmailReceived: string;
   
   
-  friendsRequestReceived: any;
-  friendsRequestSend: any;
-  requestReceive: any;
-  requestSend: any;
+  pendingPlayInvitations: Array<string> = [];
+  sendInvitation: any;
+  players: Array<string> = [];
+  
 
 
   constructor(private firestore: AngularFirestore,
@@ -47,6 +47,7 @@ export class GameCreationPage implements OnInit {
               private navCtrl: NavController,
               private route: ActivatedRoute, 
               private router: Router,
+              private matchService: MatchService
     ) { 
       this.route.queryParams.subscribe(params => {
         if (this.router.getCurrentNavigation().extras.state) {
@@ -64,6 +65,9 @@ export class GameCreationPage implements OnInit {
     this.currentUserId = this.authService.userDetails().uid;
     var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
        this.currentUser = res} );
+    const asd2 = this.matchService.getMatch(this.matchId).subscribe(res => {
+      this.players = res.players;
+    })
 
     } else {
         this.navCtrl.navigateBack('');
@@ -75,26 +79,21 @@ ionViewDidEnter() {
   this.friends = this.currentUser.friends;
 }
 
-inviteFriendToMatch(userId: string, email: string){
-  this.userEmailReceived = this.authService.userDetails().email;
+inviteFriendToMatch(email: string){
   this.currentUserId = this.authService.userDetails().uid;
 
-  this.requestReceive = this.userService.getUser(userId).pipe(first()).subscribe(res => {  this.user = res , 
-    this.friendsRequestReceived = res.friendsRequestReceived,
-    this.friendsRequestReceived.push(this.userEmailReceived),
-    this.userService.updateUser({
-      friendsRequestReceived: this.friendsRequestReceived,
-    } , userId); });
 
+  this.asd = this.userService.getUsers().pipe(first()).subscribe(res => {
+    res.forEach(element => { 
+      if (element.email === email) {
+      this.pendingPlayInvitations = element.pendingPlayInvitations;
+      this.pendingPlayInvitations.push(this.currentUserEmail);
+      this.userService.updateUser({
+      pendingPlayInvitations: this.pendingPlayInvitations, 
+     }, element.id);
 
-  this.requestSend = this.userService.getUser(this.currentUserId).pipe(first()).subscribe(res => { this.currentUser = res ,
-    this.friendsRequestSend = res.friendsRequestSend,
-    this.friendsRequestSend.push(email),
-    this.userService.updateUser({
-      friendsRequestSend: this.friendsRequestSend,
-    } , this.currentUserId);
+    }});
   });
-
 }
 
 createNewMatch() 

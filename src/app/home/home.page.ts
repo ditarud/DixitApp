@@ -9,6 +9,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
 import { first } from 'rxjs/operators';
 import { CardsService } from '../services/cards.service';
+import { MatchService } from '../services/match.service';
+import { element } from 'protractor';
 
 
 @Component({
@@ -22,7 +24,7 @@ export class HomePage implements OnInit, OnDestroy {
   // users: UserI[];
   currentUserId: any;
   user: any;
-  currentUser: UserI;
+  currentUser: UserI  = null;
   friendsRequestReceived: any;
   friendsRequestSend: any;
   requestReceive: any;
@@ -33,10 +35,13 @@ export class HomePage implements OnInit, OnDestroy {
   public unsubscribeBackEvent: any;
   updateStatus: any;
   goalList2: any;
+  playerToAddId: any;
 
-  public goalList: any[];
+  public goalList: any[] = [];
   public loadedGoalList: any[];
-  pendingRequests: Array<string>;
+  pendingRequests: Array<string> = [];
+  pendingInvitations: Array<string> = [];
+  players: Array<string> = [];
 
   constructor(private firestore: AngularFirestore,
               private plt: Platform,
@@ -45,7 +50,8 @@ export class HomePage implements OnInit, OnDestroy {
               private navCtrl: NavController,
               private authService: AuthenticateService,
               public alertController: AlertController, 
-              private cardService: CardsService
+              private cardService: CardsService,
+              private matchService: MatchService,
               ) {
 
 
@@ -73,7 +79,9 @@ export class HomePage implements OnInit, OnDestroy {
       this.updateDoc('Online');
       
       var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
-          this.currentUser = res , this.pendingRequests = this.currentUser.friendsRequestReceived; });
+          this.currentUser = res , 
+          this.pendingRequests = this.currentUser.friendsRequestReceived,
+          this.pendingInvitations = this.currentUser.pendingPlayInvitations; });
 
       } else {
           this.navCtrl.navigateBack('');
@@ -87,7 +95,10 @@ export class HomePage implements OnInit, OnDestroy {
       this.goalList = this.goalList.filter(obj => obj.email !== this.authService.userDetails().email);
 
       if ( this.pendingRequests.length > 0) {
-        this.scheduleNotification(this.pendingRequests.length);
+        this.scheduleNotificationFriend(this.pendingRequests.length);
+     }
+      if ( this.pendingInvitations.length > 0) {
+       this.scheduleNotificationInvitation(this.pendingInvitations.length);
      }
     
 
@@ -111,12 +122,16 @@ export class HomePage implements OnInit, OnDestroy {
   ionvViewWillEnter() {
     this.initializeBackButtonCustomHandler();
     if ( this.pendingRequests.length > 0) {
-      this.scheduleNotification(this.pendingRequests.length);
+      this.scheduleNotificationFriend(this.pendingRequests.length);
    }
+    if ( this.pendingInvitations.length > 0) {
+      this.scheduleNotificationInvitation(this.pendingInvitations.length);
+   }
+ 
     
   }
 
-  ionViewWillLeave(){    
+  ionViewWillLeave(){
     this.unsubscribeBackEvent.unsubscribe();
   }
 
@@ -183,11 +198,25 @@ export class HomePage implements OnInit, OnDestroy {
     this.navCtrl.navigateForward('/match-list');
   }
   
-  scheduleNotification(notificationsNumber: number) {
+  scheduleNotificationFriend(notificationsNumber: number) {
     this.localNotifications.schedule({
       id: 1,
       title: 'Solicitud de Amistad',
       text: 'Tienes ' + notificationsNumber + ' solicitudes pendientes',
+      data: {mydata: 'My hidden messa this is'},
+      trigger: {in: 1, unit: ELocalNotificationTriggerUnit.SECOND},
+      foreground: true,
+      lockscreen: true,
+      priority: 2,
+
+    });
+  }
+
+  scheduleNotificationInvitation(notificationsNumber: number) {
+    this.localNotifications.schedule({
+      id: 1,
+      title: 'Invitación a jugar',
+      text: 'Tienes ' + notificationsNumber + ' invitaciones a jugar pendientes',
       data: {mydata: 'My hidden messa this is'},
       trigger: {in: 1, unit: ELocalNotificationTriggerUnit.SECOND},
       foreground: true,
@@ -282,6 +311,36 @@ export class HomePage implements OnInit, OnDestroy {
       } , this.currentUserId); });
     
     
+}
+
+addUserToMatch(email: string) {
+
+  const searchEmail = this.userService.getUsers().pipe(first()).subscribe(res => {   
+    res.forEach(element => {
+      if (element.email === email) {
+       this.playerToAddId = element.id;
+      this.pendingInvitations = this.pendingInvitations.filter(obj => obj !== element.email);
+      this.userService.updateUser({
+      pendingPlayInvitations: this.pendingInvitations,
+  }, this.currentUserId);
+}
+});  
+});
+
+ const updateMatch = this.matchService.getAllMatches().pipe(first()).subscribe(res => {  
+   res.forEach(element => {
+   
+     this.players = element.players;
+     this.players.push(this.currentUserEmail);
+
+     if (element.playerMaster === this.playerToAddId) {
+      console.log(element.id);
+       this.matchService.updateMatch({
+         players: this.players,
+       } , element.id);
+     }
+   });
+  });
 }
 
 }
