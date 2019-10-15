@@ -1,17 +1,17 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title slot="start">  Home   </ion-title> 
     <ion-title slot="end" style="font-size: 12px" > Hola: {{ currentUserEmail }}</ion-title>
   </ion-toolbar>
   
 </ion-header>
+<br/>
 
-
-  <ion-label style="font-weight: bold" *ngIf="pendingRequests"> Solicitudes Pendientes: {{ pendingRequests.length }}</ion-label> 
+<ion-label class="solicitudes" style="font-weight: bold" *ngIf="pendingRequests"> Solicitudes Pendientes: {{ pendingRequests.length }}</ion-label> 
  
 
 <ion-content>
-    <ion-searchbar
+    <ion-searchbar color="light"
       showcancelbutton=""
       (input)="filterList($event)"
     ></ion-searchbar>
@@ -24,14 +24,14 @@
 
 
 <ion-content padding>
-  <ion-button expand="block" (click)="goMyFriends()">Mis Amigos</ion-button>
-  <ion-button expand="block" (click)="goMatchList()">Ver mis Partidas</ion-button>
+  <ion-button color="tertiary" expand="block" (click)="goMyFriends()">Mis Amigos</ion-button>
+  <ion-button color="tertiary" expand="block" (click)="goMatchList()">Ver mis Partidas</ion-button>
 </ion-content>
 
 
 
 <ion-footer (click)="logout()">
-  <ion-toolbar color="secondary">
-    <ion-title>Log out</ion-title>
+  <ion-toolbar color="medium">
+    <ion-title><i class="fas fa-sign-out-alt"></i>Log out</ion-title>
   </ion-toolbar>
 </ion-footer>
