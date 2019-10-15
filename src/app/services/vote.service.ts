@@ -25,23 +25,8 @@ export class VoteService {
     }));
   }
 
-  public userVoteAccuracy() {
-    let sum = 0;
-    var n = 0;
-    console.log(this.votes);
-    this.votes.forEach(function(value) {
-      console.log("########userVoteAccuracy#########");
-      n += value.length;
-      value.forEach(function(i) {
-        if(i.correct){
-          sum += 1;
-        }
-      });
-      sum = sum / n;
-    });
-    console.log("sum: " + sum);
-    console.log("n: " + n);
-    return sum;
+  public userVotes() {
+    return this.votes;
   }
 
 

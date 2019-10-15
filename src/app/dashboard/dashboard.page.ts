@@ -3,6 +3,7 @@ import { NavController, ModalController } from '@ionic/angular';
 import { AuthenticateService } from '../services/authentication.service';
 import { VoteService } from '../services/vote.service';
 import { VoteI } from '../models/vote.interface';
+import { first } from 'rxjs/operators';
 
 
 
@@ -18,7 +19,7 @@ export class DashboardPage implements OnInit {
   userEmail: string;
   userId: string;
   userVotes: Array<VoteI>;
-  avg: any;
+  avg: number;
 
 
   constructor(
@@ -39,8 +40,17 @@ export class DashboardPage implements OnInit {
   }
 
   getAvg(){
-    console.log("#####getAvg#####");
-    console.log(this.voteService.userVoteAccuracy());
+    this.voteService.userVotes().pipe(first()).subscribe(res => {
+      var sum = 0;
+      var n = res.length;
+      res.forEach(value => {
+        if(value.correct){
+          sum += 1;
+        }
+      })
+      this.avg = sum / n;
+      console.log(this.avg);
+    })
   }
 
   logout(){
