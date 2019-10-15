@@ -29,6 +29,12 @@
 </ion-content>
 
 
+<ion-item *ngFor="let invitation of pendingInvitations">    
+  <ion-label>   
+    <h2 >{{ invitation }}</h2>  
+  </ion-label> <ion-button (click)="addUserToMatch(invitation)" color="success">Aceptar</ion-button> <ion-button (click)="rejectFriend(requestId)" color="danger">Rechazar</ion-button>
+</ion-item>
+
 
 <ion-footer (click)="logout()">
   <ion-toolbar color="secondary">

@@ -11,11 +11,13 @@
 <ion-list>      
   <ion-item *ngFor="let friend of friends">  
     
-      <ion-label>{{ friend }}</ion-label><ion-button (click)="inviteFriendToMatch(friend.userId, friend.email)" color="success">Invite</ion-button>
+      <ion-label>{{ friend }}</ion-label><ion-button (click)="inviteFriendToMatch(friend)" color="success">Invitar</ion-button>
     
   </ion-item>
 </ion-list>
 </ion-content>
+
+<ion-content>
 <ion-item>
     <ion-label>Puntos de la partida</ion-label>
     <ion-select value="10" okText="Okay" cancelText="Dismiss">
@@ -47,8 +49,16 @@
         <ion-select-option value="180">3 horas</ion-select-option>
       </ion-select>
     </ion-item>
+  </ion-content>
 
 <ion-content>
+     <ion-label class="ion-padding">Jugadores Agregados:</ion-label>
+    <ion-item *ngFor="let player of players">  
+    
+        {{ player }}
+      
+    </ion-item>
+
 </ion-content>
 
 <ion-footer (click)="createNewMatch()" >
