@@ -44,12 +44,11 @@ export class DashboardPage implements OnInit {
       var sum = 0;
       var n = res.length;
       res.forEach(value => {
-        if(value.correct){
+        if(value.correct && value.user == this.userEmail){
           sum += 1;
         }
       })
       this.avg = sum / n;
-      console.log(this.avg);
     })
   }
 
