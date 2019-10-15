@@ -96,13 +96,8 @@ export class FriendsPage implements OnInit, OnDestroy {
   });  
   });
  
-      
-  
-
     this.sendingRequests = this.sendingRequests.filter(obj => obj !== this.currentUser.email);
 
-    
- 
   }
 
   rejectFriend(requestId: string) {
