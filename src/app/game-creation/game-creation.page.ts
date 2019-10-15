@@ -9,6 +9,7 @@ import { Platform } from '@ionic/angular';
 import { NavController, ModalController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { User } from 'firebase';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-creation',
@@ -27,17 +28,28 @@ export class GameCreationPage implements OnInit {
   sendingRequests: Array<string>;
   asd: Subscription;
   currentUserEmail: string;
+  matchId: any;
 
   constructor(private firestore: AngularFirestore,
               private userService: UserService,
               private authService: AuthenticateService, 
               private plt: Platform,
               private navCtrl: NavController,
-    ) { }
+              private route: ActivatedRoute, 
+              private router: Router,
+    ) { 
+      this.route.queryParams.subscribe(params => {
+        if (this.router.getCurrentNavigation().extras.state) {
+          this.matchId = this.router.getCurrentNavigation().extras.state.matchId;
+           console.log(this.matchId);
+        }
+      });
+
+    }
 
   ngOnInit() {
     this.currentUserEmail = this.authService.userDetails().email;
-
+    
     if(this.authService.userDetails()) {
     this.currentUserId = this.authService.userDetails().uid;
     var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
@@ -52,6 +64,11 @@ export class GameCreationPage implements OnInit {
 ionViewDidEnter() {
   this.friends = this.currentUser.friends;
 }
+
+refreshView() {
+  
+}
+
 }
 
 
