@@ -27,6 +27,7 @@ export class MatchListPage implements OnInit, OnDestroy {
   asd: Subscription;
   matchStatus: string;
   matchId: string;
+  
 
   constructor(private matchService: MatchService, 
     private authService: AuthenticateService, 
@@ -38,9 +39,9 @@ export class MatchListPage implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.temporalactiveMatches = []
+    this.temporalactiveMatches = [];
+    this.matchDeck = this.cardService.getAllIomage();
     
-
   }
 
   ngOnDestroy() {
@@ -85,12 +86,17 @@ export class MatchListPage implements OnInit, OnDestroy {
       playerMaster: this.currentUserId,
       deckId: '',
       date: this.today,
+      deck: this.matchDeck,
+      cardsInGame: [],
+      discardedCards: [],
     });
     this.navCtrl.navigateForward('/game-creation');
-    this.imagesFromDb = this.cardService.getAllIomage();
+    //this.imagesFromDb = this.cardService.getAllIomage();
 
-    this.CreateDeck();
+    //this.CreateDeck();
    }
+
+   
 
    loadRunningGame(matchId: string) {
     let navigationExtras: NavigationExtras = {
@@ -116,4 +122,6 @@ export class MatchListPage implements OnInit, OnDestroy {
         console.log(error);
       });
   }
+
+  
 }
