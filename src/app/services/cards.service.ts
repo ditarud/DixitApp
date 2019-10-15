@@ -32,5 +32,9 @@ export class CardsService {
   createDeckForGame(deck) {
     return this.fs.collection('deck').add(deck);
   }
+
+  addFriendsToMatch(friend) {
+    return this.fs.collection('match').valueChanges();
+  }
 }
 

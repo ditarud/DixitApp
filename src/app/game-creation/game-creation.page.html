@@ -7,20 +7,52 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-list>
-  <ion-list-header>
-    Mis Amigos
-  </ion-list-header>    
-  <ion-item *ngFor="let friend of friends">
-  
-    <ion-label>
-      <h2>{{ friend }}</h2>
-      <h3>I'm a big deal</h3>
-      <p>Listen, I've had a pretty messed up day...</p>
-    </ion-label>
+<ion-content>  
+<ion-list>      
+  <ion-item *ngFor="let friend of friends">  
+    
+      <ion-label>{{ friend }}</ion-label><ion-button (click)="inviteFriendToMatch(friend.userId, friend.email)" color="success">Invite</ion-button>
+    
   </ion-item>
 </ion-list>
+</ion-content>
+<ion-item>
+    <ion-label>Puntos de la partida</ion-label>
+    <ion-select value="10" okText="Okay" cancelText="Dismiss">
+      <ion-select-option value="10">10</ion-select-option>
+      <ion-select-option value="15">15</ion-select-option>
+      <ion-select-option value="20">20</ion-select-option>
+      <ion-select-option value="25">25</ion-select-option>
+      <ion-select-option value="30">30</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+      <ion-label>Espera entre jugadas</ion-label>
+      <ion-select value="10" okText="Okay" cancelText="Dismiss">
+        <ion-select-option value="5">5</ion-select-option>
+        <ion-select-option value="10">10 minutos</ion-select-option>
+        <ion-select-option value="15">15 minutos</ion-select-option>
+        <ion-select-option value="20">20 minutos</ion-select-option>
+        <ion-select-option value="25">25 minutos</ion-select-option>
+        <ion-select-option value="30">30 minutos</ion-select-option>
+        <ion-select-option value="40">40 minutos</ion-select-option>
+        <ion-select-option value="45">45 minutos</ion-select-option>
+        <ion-select-option value="50">50 minutos</ion-select-option>
+        <ion-select-option value="55">55 minutos</ion-select-option>
+        <ion-select-option value="60">1 hora</ion-select-option>
+        <ion-select-option value="90">1 hora 30 minutos</ion-select-option>
+        <ion-select-option value="120">2 horas</ion-select-option>
+        <ion-select-option value="150">2 horas 30 minutos</ion-select-option>
+        <ion-select-option value="180">3 horas</ion-select-option>
+      </ion-select>
+    </ion-item>
 
 <ion-content>
-
 </ion-content>
+
+<ion-footer (click)="createNewMatch()" >
+    <ion-toolbar color="secondary">
+      <ion-title style="text-align: center">GO</ion-title>
+    </ion-toolbar>
+</ion-footer>
