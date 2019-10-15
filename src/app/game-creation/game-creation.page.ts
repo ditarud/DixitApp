@@ -23,7 +23,6 @@ export class GameCreationPage implements OnInit {
   friendList: any;
   currentFriendList: any;
   user: any;
-  urrentUser: any;
   friends: Array<string>;
   pendingRequests: Array<string>;
   sendingRequests: Array<string>;
@@ -33,20 +32,12 @@ export class GameCreationPage implements OnInit {
 
   userEmailSend: string;
   userEmailReceived: string;
-  // users: UserI[];
+  
   
   friendsRequestReceived: any;
   friendsRequestSend: any;
   requestReceive: any;
   requestSend: any;
-  currentUserStatus: any;
-  statusUpdated: any;
-  public unsubscribeBackEvent: any;
-  updateStatus: any;
-  goalList2: any;
-
-  public goalList: any[];
-  public loadedGoalList: any[];
 
 
   constructor(private firestore: AngularFirestore,
@@ -112,7 +103,7 @@ createNewMatch()
 }
 
 refreshView() {
-  
+
 }
 
 }

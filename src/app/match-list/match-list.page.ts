@@ -5,9 +5,9 @@ import { NavController } from '@ionic/angular';
 import { first } from 'rxjs/operators';
 
 
-
 import { CardsService } from '../services/cards.service';
 import { Subscription } from 'rxjs';
+import { Router, NavigationExtras } from '@angular/router';
 
 
 @Component({
@@ -31,7 +31,8 @@ export class MatchListPage implements OnInit, OnDestroy {
   constructor(private matchService: MatchService, 
     private authService: AuthenticateService, 
     private navCtrl: NavController , 
-    private cardService: CardsService) { 
+    private cardService: CardsService,
+    private router: Router) { 
       
     }
 
@@ -92,9 +93,12 @@ export class MatchListPage implements OnInit, OnDestroy {
    }
 
    loadRunningGame(matchId: string) {
-    // Llamar metodo de game creation para que actualice la vista?  game-creation.refresh(matchId) 
-    console.log(matchId);
-    this.navCtrl.navigateForward('/game-creation');
+    let navigationExtras: NavigationExtras = {
+      state: {
+        matchId: matchId,
+      }
+    };
+    this.router.navigate(['game-creation'], navigationExtras);
    }
 
   CreateDeck() { 
