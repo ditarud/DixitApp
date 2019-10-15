@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController } from '@ionic/angular';
 import { AuthenticateService } from '../services/authentication.service';
+import { VoteService } from '../services/vote.service';
+import { VoteI } from '../models/vote.interface';
+
+
 
 
 @Component({
@@ -12,18 +16,31 @@ import { AuthenticateService } from '../services/authentication.service';
 
 export class DashboardPage implements OnInit {
   userEmail: string;
+  userId: string;
+  userVotes: Array<VoteI>;
+  avg: any;
+
 
   constructor(
     private navCtrl: NavController,
-    private authService: AuthenticateService
+    private authService: AuthenticateService,
+    private voteService: VoteService
   ) { }
 
   ngOnInit() {
     if(this.authService.userDetails()){
       this.userEmail = this.authService.userDetails().email;
+      this.userEmail = this.authService.userDetails().uid;
+      this.getAvg();
     }else{
       this.navCtrl.navigateBack('');
     }
+
+  }
+
+  getAvg(){
+    console.log("#####getAvg#####");
+    console.log(this.voteService.userVoteAccuracy());
   }
 
   logout(){
