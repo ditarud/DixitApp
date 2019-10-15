@@ -14,7 +14,7 @@
         <ion-item-sliding *ngFor="let match of activeMatches">
         
             <ion-card>             
-                <button ion-item (click)="loadRunningGame()">
+                <button ion-item (click)="loadRunningGame(match)">
                   
                    ID Partida: {{match}} 
                    Estado: {{matchStatus}}

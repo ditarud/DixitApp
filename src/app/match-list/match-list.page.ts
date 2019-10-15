@@ -26,6 +26,7 @@ export class MatchListPage implements OnInit, OnDestroy {
   imagesFromDb: Array<string>;
   asd: Subscription;
   matchStatus: string;
+  matchId: string;
 
   constructor(private matchService: MatchService, 
     private authService: AuthenticateService, 
@@ -50,10 +51,12 @@ export class MatchListPage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {   
+    this.temporalactiveMatches = []
     this.currentUserId = this.authService.userDetails().uid;
     var asd = this.matchService.getAllMatches().pipe(first()).subscribe(res => { 
       res.forEach(element => {
         if (element.playerMaster === this.currentUserId) {
+          this.matchId = element.id;
           this.temporalactiveMatches.push(element.id);
            this.matchService.getMatch(element.id).pipe(first()).subscribe(res => {
               this.matchStatus = res.status;
@@ -61,12 +64,11 @@ export class MatchListPage implements OnInit, OnDestroy {
           
         }
         this.activeMatches = this.temporalactiveMatches;
-        console.log(this.activeMatches);
+        //console.log(this.activeMatches);
         
       });
       });
 
-    this.imagesFromDb = this.cardService.getAllIomage();
 
   }
 
@@ -84,21 +86,22 @@ export class MatchListPage implements OnInit, OnDestroy {
       date: this.today,
     });
     this.navCtrl.navigateForward('/game-creation');
+    this.imagesFromDb = this.cardService.getAllIomage();
+
     this.CreateDeck();
    }
 
-   loadRunningGame() {
-    
+   loadRunningGame(matchId: string) {
+    // Llamar metodo de game creation para que actualice la vista?  game-creation.refresh(matchId) 
+    console.log(matchId);
+    this.navCtrl.navigateForward('/game-creation');
    }
 
-  CreateDeck() {
-     //this.imagesFromDb = this.cardService.getAllIomage(); 
-
-
+  CreateDeck() { 
     let record = {};
     record['cards_on_deck'] = this.imagesFromDb;
     record['discarded_cards'] = [];
-    record['match_id'] = 'aer';
+    record['match_id'] = this.matchId;
     record['playing_cards'] = [];
 
     this.cardService.createDeckForGame(record).then(resp => {
