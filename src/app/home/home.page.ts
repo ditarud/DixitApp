@@ -329,12 +329,13 @@ addUserToMatch(email: string) {
 
  const updateMatch = this.matchService.getAllMatches().pipe(first()).subscribe(res => {  
    res.forEach(element => {
-   
-     this.players = element.players;
-     this.players.push(this.currentUserEmail);
+    console.log("Jugadores: " + this.players);
+  
 
      if (element.playerMaster === this.playerToAddId) {
-      console.log(element.id);
+      this.players = element.players;
+      this.players.push(this.currentUserEmail);
+      console.log("ACA" + element.id);
        this.matchService.updateMatch({
          players: this.players,
        } , element.id);

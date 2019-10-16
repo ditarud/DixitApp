@@ -5,12 +5,24 @@
         <ion-back-button defaultHref="match-list"></ion-back-button>
     </ion-buttons>
 
+
+
     <ion-buttons slot="end">
         <ion-button class="tablero" (click)="openMyModal()"> Ver Tablero </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content>
 
+
 </ion-content>
+
+
+
+<ion-footer>
+  <ion-toolbar color="medium">
+    <ion-input [(ngModel)]="phrase" placeholder="Frase del narrador"></ion-input>
+  </ion-toolbar>
+</ion-footer>

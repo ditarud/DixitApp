@@ -44,6 +44,7 @@ export class MatchListPage implements OnInit, OnDestroy {
     this.matchDeck = [];
     this.temporalactiveMatches = [];
     this.currentUserId = this.authService.userDetails().uid;
+    this.currentUserEmail = this.authService.userDetails().email;
       
      if (this.matchDeck.length < 73 ) {
       this.matchDeck = this.cardService.getAllIomage();
@@ -70,7 +71,7 @@ export class MatchListPage implements OnInit, OnDestroy {
     
     this.asd = this.matchService.getAllMatches().pipe(first()).subscribe(res => { 
       res.forEach(element => {
-        if (element.playerMaster === this.currentUserId && this.check === true) {
+        if ((element.playerMaster === this.currentUserId && this.check === true) || (element.showToAll === true && element.players.includes(this.currentUserEmail))) {
           console.log(element.id);
          
         
@@ -112,6 +113,7 @@ export class MatchListPage implements OnInit, OnDestroy {
       cardsInGame: [],
       discardedCards: [],
       winner: '',
+      showToAll: false,
     });
     
     this.navCtrl.navigateForward('/game-creation');
@@ -130,7 +132,7 @@ export class MatchListPage implements OnInit, OnDestroy {
       }
     };
  
-    
+    this.asd.unsubscribe();
     this.router.navigate(['game-creation'], navigationExtras);
    }
 

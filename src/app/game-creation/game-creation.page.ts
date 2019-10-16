@@ -5,7 +5,7 @@ import { UserService } from '../services/user.service';
 import { AuthenticateService } from '../services/authentication.service';
 import { first } from 'rxjs/operators';
 import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { NavController, ModalController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { User } from 'firebase';
@@ -29,6 +29,7 @@ export class GameCreationPage implements OnInit {
   asd: Subscription;
   currentUserEmail: string;
   matchId: any;
+  showToAll: boolean;
 
   userEmailSend: string;
   userEmailReceived: string;
@@ -47,7 +48,8 @@ export class GameCreationPage implements OnInit {
               private navCtrl: NavController,
               private route: ActivatedRoute, 
               private router: Router,
-              private matchService: MatchService
+              private matchService: MatchService,
+              private alertController: AlertController
     ) { 
       this.route.queryParams.subscribe(params => {
         if (this.router.getCurrentNavigation().extras.state) {
@@ -75,7 +77,7 @@ export class GameCreationPage implements OnInit {
 
 ionViewDidEnter() {
   this.friends = this.currentUser.friends;
-  if (this.matchId != undefined) { 
+  if (this.matchId !== undefined) { 
   const asd2 = this.matchService.getMatch(this.matchId).subscribe(res => {
     this.players = res.players;
   });
@@ -99,22 +101,41 @@ inviteFriendToMatch(email: string){
   });
 }
 
-createNewMatch(matchId: string) 
-{
-  let navigationExtras: NavigationExtras = {
+createNewMatch(matchId: string) {
+  if (this.players.length === 2) {
+    this.showToAll = true;
+    if (this.matchId !== undefined) { 
+      const asd22 = this.matchService.updateMatch({showToAll: true, status: 'En juego'},this.matchId)
+      }
+    let navigationExtras: NavigationExtras = {
     state: {
       matchId: this.matchId,
     }
   };
   this.navCtrl.navigateForward(['/game'], navigationExtras);
-
+  } else {
+    this.presentAlert();
+  }
 }
 
 refreshView() {
 
 }
 
+async presentAlert() {
+  const alert = await this.alertController.create({
+    header: 'Aviso',
+    subHeader: 'Cantidad de jugadores',
+    message: 'Para continuar deben haber 2 jugadores agregados',
+    buttons: ['OK']
+  });
+
+  await alert.present();
 }
+
+
+}
+
 
 
 

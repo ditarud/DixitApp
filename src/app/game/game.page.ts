@@ -22,6 +22,7 @@ export class GamePage implements OnInit {
   test: any;
   matchCollection: any;
   item: any;
+  phrase: string;
 
   constructor(private navCtrl: NavController, 
               private modalController: ModalController, 
