@@ -23,6 +23,16 @@
 </ion-content>
 
 
+
+<ion-content> 
+  <ion-item *ngFor="let invitation of pendingInvitations">    
+    <ion-label>   
+      <h2 >{{ invitation }}</h2>  
+    </ion-label> <ion-button (click)="addUserToMatch(invitation)" color="success">Aceptar</ion-button> <ion-button (click)="rejectFriend(requestId)" color="danger">Rechazar</ion-button>
+  </ion-item>
+</ion-content>
+
+
 <ion-content padding>
   <ion-button color="tertiary" expand="block" (click)="goMyFriends()">Mis Amigos</ion-button>
   <ion-button color="tertiary" expand="block" (click)="goMatchList()">Ver mis Partidas</ion-button>
@@ -30,11 +40,6 @@
 </ion-content>
 
 
-<ion-item *ngFor="let invitation of pendingInvitations">    
-  <ion-label>   
-    <h2 >{{ invitation }}</h2>  
-  </ion-label> <ion-button (click)="addUserToMatch(invitation)" color="success">Aceptar</ion-button> <ion-button (click)="rejectFriend(requestId)" color="danger">Rechazar</ion-button>
-</ion-item>
 
 
 <ion-footer (click)="logout()">
