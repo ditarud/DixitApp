@@ -27,10 +27,10 @@ export class FriendsPage implements OnInit, OnDestroy {
 
 
   constructor(private firestore: AngularFirestore, 
-    private plt: Platform, 
-    private userService: UserService,
-    private navCtrl: NavController, 
-    private authService: AuthenticateService) { }
+              private plt: Platform, 
+              private userService: UserService,
+              private navCtrl: NavController, 
+              private authService: AuthenticateService) { }
 
   ngOnInit(){
     this.currentUserEmail = this.authService.userDetails().email;

@@ -11,6 +11,7 @@ export class MatchService {
 
   private matchCollection: AngularFirestoreCollection<MatchI>;
   private matches: Observable<MatchI[]>;
+  matchId: string;
 
   constructor(db: AngularFirestore) {
     this.matchCollection = db.collection<MatchI>('match');

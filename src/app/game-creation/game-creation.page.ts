@@ -9,8 +9,8 @@ import { Platform } from '@ionic/angular';
 import { NavController, ModalController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { User } from 'firebase';
-import { MatchService } from '../services/match.service'
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatchService } from '../services/match.service';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-game-creation',
@@ -51,7 +51,7 @@ export class GameCreationPage implements OnInit {
       this.route.queryParams.subscribe(params => {
         if (this.router.getCurrentNavigation().extras.state) {
           this.matchId = this.router.getCurrentNavigation().extras.state.matchId;
-           console.log(this.matchId);
+           //console.log(this.matchId);
         }
       });
 
@@ -97,9 +97,15 @@ inviteFriendToMatch(userId: string, email: string){
 
 }
 
-createNewMatch() 
+createNewMatch(matchId: string) 
 {
-  this.navCtrl.navigateForward('/game');
+  let navigationExtras: NavigationExtras = {
+    state: {
+      matchId: this.matchId,
+    }
+  };
+  this.navCtrl.navigateForward(['/game'], navigationExtras);
+
 }
 
 refreshView() {

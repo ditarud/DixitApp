@@ -8,8 +8,8 @@ export interface MatchI {
     playerMaster?: string;
     deckId?: string;
     date?: string;
-    deck: Array<string>;
-    cardsInGame: Array<string>;
-    discardedCards: Array<string>;
+    deck?: Array<string>;
+    cardsInGame?: Array<string>;
+    discardedCards?: Array<string>;
 
 }
