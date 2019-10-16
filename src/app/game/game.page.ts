@@ -48,7 +48,7 @@ export class GamePage implements OnInit {
   ngOnInit() {
     //console.log(this.cardService.getAllIomage());
     //console.log(this.matchId);
-    this.dealCards(this.matchId);
+    //this.dealCards(this.matchId);
   }
 
   //DEad
@@ -65,15 +65,25 @@ export class GamePage implements OnInit {
   }
 
   dealCards(matchId: string) {
-    var randoms = [...Array(6)].map(虚 => Math.floor(Math.random() * 72));    
+     
     this.matchCollection = this.matchService.getMatch(matchId).subscribe(res =>{
       this.deckFromDb = res.deck;
-      for (let card of this.deckFromDb){
-        this.allCards.push(card);
+      var randoms = [...Array(6)].map(n => Math.floor(Math.random() * 72));
+      for (let entry of randoms) {
+        this.hand.push(this.deckFromDb[entry]);
+        console.log(this.hand);
       }
+      
     } );
-    console.log(this.allCards);
     
+  }
+
+  async drawCardFromDeck(matchId: string) {
+    this.matchCollection = this.matchService.getMatch(matchId).subscribe(res => {
+      var randomCard = Math.floor(Math.random() * 72);
+      this.card = res.deck[randomCard];
+    });
+
   }
 
   showCardOnHtml(){
@@ -93,9 +103,7 @@ export class GamePage implements OnInit {
     'https://firebasestorage.googleapis.com/v0/b/dixit-3ccf3.appspot.com/o/23.jpg?alt=media&token=7591153a-bf1b-4434-9cf0-092380d7a021']
   }
 
-  drawCardFromDeck(matchId: string) {
-
-  }
+  
 
   async openMyModal() {
     const myModal = await this.modalController.create({
