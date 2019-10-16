@@ -25,6 +25,7 @@ export class MatchListPage implements OnInit, OnDestroy {
   matchDeck: Array<string>;
   imagesFromDb: Array<string>;
   asd: Subscription;
+  asd2: Subscription;
   matchStatus: string;
   matchId: string;
   check: boolean;
@@ -47,6 +48,7 @@ export class MatchListPage implements OnInit, OnDestroy {
     this.temporalactiveMatches = [];
     this.currentUserId = this.authService.userDetails().uid;
     this.currentUserEmail = this.authService.userDetails().email;
+    
       
      if (this.matchDeck.length < 73 && this.check2 === true) {
       this.matchDeck = this.cardService.getAllIomage();
@@ -59,7 +61,7 @@ export class MatchListPage implements OnInit, OnDestroy {
   
 
   ngOnDestroy() {
-    this.check = false;
+    //this.check = false;
 
   }
 
@@ -74,17 +76,22 @@ export class MatchListPage implements OnInit, OnDestroy {
     
     this.asd = this.matchService.getAllMatches().pipe(first()).subscribe(res => { 
       res.forEach(element => {
-        if ((element.playerMaster === this.currentUserId && this.check === true) || (element.showToAll === true && element.players.includes(this.currentUserEmail))) {
+        if ((element.playerMaster === this.currentUserId && this.check === true) || (element.showToAll === true && element.players.includes(this.currentUserEmail) && this.check===true)) {
           console.log(element.id);
          
-        
-            this.temporalactiveMatches.push(element.id);
-           
-        
-          this.matchId = element.id;
-           this.matchService.getMatch(element.id).pipe(first()).subscribe(res => {
+            if (this.temporalactiveMatches.indexOf(element.id) === -1) {
+              this.temporalactiveMatches.push(element.id);
+              this.matchId = element.id;
+              
+           this.asd2 = this.matchService.getMatch(element.id).pipe(first()).subscribe(res => { 
               this.matchStatus = res.status;
            });
+
+            }
+           
+        
+          
+         
         };
         this.activeMatches = this.temporalactiveMatches;
 
@@ -97,8 +104,7 @@ export class MatchListPage implements OnInit, OnDestroy {
       
   }
 
-  createNewGame() {
-    
+  createNewGame() {    
 
     this.check = true;
     const now = new Date();
@@ -136,6 +142,7 @@ export class MatchListPage implements OnInit, OnDestroy {
     };
  
     this.asd.unsubscribe();
+    this.asd2.unsubscribe();
     this.router.navigate(['game-creation'], navigationExtras);
    }
 
