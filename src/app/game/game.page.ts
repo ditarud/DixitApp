@@ -71,7 +71,8 @@ export class GamePage implements OnInit {
   async openMyModal() {
     const myModal = await this.modalController.create({
       component: BoardPage,
-      cssClass: 'modalCss'
+      cssClass: 'modalCss',
+      componentProps: { matchId: this.matchId }
     });
     return await myModal.present();
   }
