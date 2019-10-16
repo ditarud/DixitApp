@@ -65,9 +65,7 @@ export class GameCreationPage implements OnInit {
     this.currentUserId = this.authService.userDetails().uid;
     var asd = this.userService.getUser(this.currentUserId).subscribe(res =>{
        this.currentUser = res} );
-    const asd2 = this.matchService.getMatch(this.matchId).subscribe(res => {
-      this.players = res.players;
-    })
+    
 
     } else {
         this.navCtrl.navigateBack('');
@@ -77,6 +75,11 @@ export class GameCreationPage implements OnInit {
 
 ionViewDidEnter() {
   this.friends = this.currentUser.friends;
+  if (this.matchId != undefined) { 
+  const asd2 = this.matchService.getMatch(this.matchId).subscribe(res => {
+    this.players = res.players;
+  });
+  }
 }
 
 inviteFriendToMatch(email: string){

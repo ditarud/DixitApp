@@ -16,8 +16,8 @@ import { Router, NavigationExtras } from '@angular/router';
   styleUrls: ['./match-list.page.scss'],
 })
 export class MatchListPage implements OnInit, OnDestroy {
-  activeMatches: Array<string>;
-  temporalactiveMatches: Array<string>;
+  activeMatches: Array<string> = [];
+  temporalactiveMatches: Array<string> = [];
   currentUserEmail: string;
   currentUserId: string;
   currentUser: any;
@@ -27,6 +27,8 @@ export class MatchListPage implements OnInit, OnDestroy {
   asd: Subscription;
   matchStatus: string;
   matchId: string;
+  check: boolean;
+
   
 
   constructor(private matchService: MatchService, 
@@ -34,47 +36,64 @@ export class MatchListPage implements OnInit, OnDestroy {
     private navCtrl: NavController , 
     private cardService: CardsService,
     private router: Router) { 
-      
+      this.temporalactiveMatches = [];
     }
 
 
   ngOnInit() {
-    this.temporalactiveMatches = [];
-    this.matchDeck = this.cardService.getAllIomage();
     
+    this.temporalactiveMatches = [];
+    this.currentUserId = this.authService.userDetails().uid;
+      
+   this.matchDeck = this.cardService.getAllIomage();
+      
+  
   }
+    
+    
+  
 
   ngOnDestroy() {
+    this.check = false;
 
   }
 
   ionViewWillEnter() {
+    this.check = true;
     
   }
 
   ionViewDidEnter() {   
-    this.temporalactiveMatches = []
-    this.currentUserId = this.authService.userDetails().uid;
-    var asd = this.matchService.getAllMatches().pipe(first()).subscribe(res => { 
+    console.log("Did Enter");
+    this.temporalactiveMatches = [];
+    
+    this.asd = this.matchService.getAllMatches().pipe(first()).subscribe(res => { 
       res.forEach(element => {
-        if (element.playerMaster === this.currentUserId) {
+        if (element.playerMaster === this.currentUserId && this.check === true) {
+          console.log(element.id);
+         
+        
+            this.temporalactiveMatches.push(element.id);
+           
+        
           this.matchId = element.id;
-          this.temporalactiveMatches.push(element.id);
            this.matchService.getMatch(element.id).pipe(first()).subscribe(res => {
               this.matchStatus = res.status;
            });
-          
-        }
+        };
         this.activeMatches = this.temporalactiveMatches;
-        //console.log(this.activeMatches);
+
+
         
       });
+   
       });
-
-
+     
+      
   }
 
   createNewGame() {
+    this.check = true;
     const now = new Date();
     this.today = now.toLocaleString();
     this.matchService.addMatch({
@@ -90,6 +109,7 @@ export class MatchListPage implements OnInit, OnDestroy {
       cardsInGame: [],
       discardedCards: [],
     });
+    
     this.navCtrl.navigateForward('/game-creation');
     //this.imagesFromDb = this.cardService.getAllIomage();
 
@@ -99,11 +119,14 @@ export class MatchListPage implements OnInit, OnDestroy {
    
 
    loadRunningGame(matchId: string) {
+    this.check = false;
     let navigationExtras: NavigationExtras = {
       state: {
         matchId: matchId,
       }
     };
+ 
+    
     this.router.navigate(['game-creation'], navigationExtras);
    }
 
