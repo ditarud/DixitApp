@@ -111,6 +111,7 @@ export class MatchListPage implements OnInit, OnDestroy {
       deck: this.matchDeck,
       cardsInGame: [],
       discardedCards: [],
+      winner: '',
     });
     
     this.navCtrl.navigateForward('/game-creation');

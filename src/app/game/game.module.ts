@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { GamePage } from './game.page';
-//import { BoardPage } from '../board/board.page';
+import { BoardPage } from '../board/board.page';
 
 const routes: Routes = [
   {
@@ -23,9 +23,9 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     
   ],
-  declarations: [GamePage, //BoardPage
+  declarations: [GamePage, BoardPage
   ],
-  entryComponents: [//BoardPage
+  entryComponents: [BoardPage
   ]
 })
 export class GamePageModule {}
