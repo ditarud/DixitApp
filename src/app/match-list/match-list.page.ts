@@ -28,6 +28,7 @@ export class MatchListPage implements OnInit, OnDestroy {
   matchStatus: string;
   matchId: string;
   check: boolean;
+  check2: boolean;
 
   
 
@@ -37,6 +38,7 @@ export class MatchListPage implements OnInit, OnDestroy {
     private cardService: CardsService,
     private router: Router) { 
       this.temporalactiveMatches = [];
+      this.check2 = true;
     }
 
 
@@ -46,8 +48,9 @@ export class MatchListPage implements OnInit, OnDestroy {
     this.currentUserId = this.authService.userDetails().uid;
     this.currentUserEmail = this.authService.userDetails().email;
       
-     if (this.matchDeck.length < 73 ) {
+     if (this.matchDeck.length < 73 && this.check2 === true) {
       this.matchDeck = this.cardService.getAllIomage();
+      this.check2 = false;
 
      } 
   }
