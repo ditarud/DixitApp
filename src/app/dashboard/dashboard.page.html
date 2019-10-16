@@ -8,8 +8,25 @@
  
   <ion-grid>
     <ion-row>
-    <ion-col text-center>Rartio de aciertos en votos: {{avg}}</ion-col>
+      <ion-col text-center>Ratio de aciertos en votos: {{avg}}</ion-col>
     </ion-row>
+
+    <ion-row>
+      <ion-col text-center>Partidas jugadas: {{playedMatches}}</ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col text-center>Partidas ganadas: {{wins}}</ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col text-center>Ratio de partidas ganadas: {{winRatio}}</ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col text-center>Ultima partida: {{lastMatch | json}}</ion-col>
+    </ion-row>
+  
   </ion-grid>  
   
   

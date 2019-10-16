@@ -11,5 +11,6 @@ export interface MatchI {
     deck?: Array<string>;
     cardsInGame?: Array<string>;
     discardedCards?: Array<string>;
+    winner?: string;
 
 }

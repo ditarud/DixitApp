@@ -29,5 +29,21 @@ export class VoteService {
     return this.votes;
   }
 
+  getVote(id: string) {
+    return this.voteCollection.doc<VoteI>(id).valueChanges();
+  }
+
+  updateVote(vote: VoteI, id: string) {
+    return this.voteCollection.doc(id).update(vote);
+  }
+
+  addVote(vote: VoteI) {
+    return this.voteCollection.add(vote);
+  }
+
+  removeVote(id: string) {
+    return this.voteCollection.doc(id).delete;
+  }
+
 
 }
