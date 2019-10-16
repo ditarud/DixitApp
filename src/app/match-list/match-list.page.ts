@@ -41,13 +41,14 @@ export class MatchListPage implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    
+    this.matchDeck = [];
     this.temporalactiveMatches = [];
     this.currentUserId = this.authService.userDetails().uid;
       
-   this.matchDeck = this.cardService.getAllIomage();
-      
-  
+     if (this.matchDeck.length < 73 ) {
+      this.matchDeck = this.cardService.getAllIomage();
+
+     } 
   }
     
     
@@ -93,6 +94,8 @@ export class MatchListPage implements OnInit, OnDestroy {
   }
 
   createNewGame() {
+    
+
     this.check = true;
     const now = new Date();
     this.today = now.toLocaleString();
