@@ -6,4 +6,13 @@
 
 <ion-content>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center>MatchId:<b> {{matchId}}</b></ion-col>
+    </ion-row>
+    <ion-row ng-repeat="match in scores">
+      <ion-col text-center> User: {{match.user}} </ion-col>
+      <ion-col text-center> Score: {{match.score}} </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
