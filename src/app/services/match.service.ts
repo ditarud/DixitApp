@@ -29,7 +29,6 @@ export class MatchService {
      return this.matches;
    }
 
- 
    getMatch(id: string) {
      return this.matchCollection.doc<MatchI>(id).valueChanges();
    }

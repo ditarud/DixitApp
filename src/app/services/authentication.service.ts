@@ -27,7 +27,7 @@ export class AuthenticateService {
         .firestore()
         .doc(`/userProfile/${newUserCredential.user.uid}`)
         .set({ email: value.email, status: '', friends: [] , name: '' , userId: newUserCredential.user.uid , friendsRequestReceived: [], 
-        friendsRequestSend: [], });
+        friendsRequestSend: [], pendingPlayInvitations: [] });
     }).then ( res => resolve(res), err => reject(err))
     .catch(error => {
       console.error(error);
