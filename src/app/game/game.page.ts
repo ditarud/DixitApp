@@ -22,14 +22,11 @@ export class GamePage implements OnInit {
   test: any;
   matchCollection: any;
   item: any;
-<<<<<<< HEAD
   phrase: string;
-=======
   cardPositions: Array<number>;
   randoms: any;
   allCards: Array<string>;
   images: Array<string>;
->>>>>>> 3213f3b033797f961eab63166eab393d6ebfd3ff
 
   constructor(private navCtrl: NavController, 
               private modalController: ModalController, 
